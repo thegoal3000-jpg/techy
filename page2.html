@@ -42,6 +42,13 @@
             width: 100%;
         }
         
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        
         .type-box {
             width: 12in;
             height: 6in;
@@ -76,6 +83,26 @@
         .type-box-text:focus {
             outline: none;
         }
+        
+        .start-box {
+            width: 4in;
+            height: 2in;
+            background-color: white;
+            border: 2px solid black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            font-weight: bold;
+            color: black;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .start-box:hover {
+            transform: scale(1.05);
+            background-color: #f0f0f0;
+        }
     </style>
 </head>
 <body>
@@ -86,8 +113,11 @@
         <p>Click the X in the top left to go back to the main page</p>
     </div>
     
-    <div class="type-box">
-        <textarea class="type-box-text" placeholder="Click here and start typing..."></textarea>
+    <div class="container">
+        <div class="type-box">
+            <textarea class="type-box-text" placeholder="Click here and start typing..."></textarea>
+        </div>
+        <div class="start-box">Start</div>
     </div>
 </body>
 </html>

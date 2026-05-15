@@ -45,6 +45,16 @@
             flex-direction: column;
             text-align: center;
         }
+        
+        .box:first-child {
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .box:first-child:hover {
+            transform: scale(1.05);
+            background-color: #f0f0f0;
+        }
     </style>
 </head>
 <body>
@@ -53,7 +63,7 @@
     </div>
     
     <div class="container">
-        <div class="box"><div>auto type</div><div>1.0</div></div>
+        <div class="box" onclick="window.location.href='page2.html'"><div>auto type</div><div>1.0</div></div>
         <div class="box">Box 2</div>
         <div class="box">Box 3</div>
     </div>

@@ -108,6 +108,14 @@
             opacity: 0.5;
             cursor: not-allowed;
         }
+        
+        .instructions {
+            color: white;
+            font-size: 16px;
+            margin-top: 20px;
+            max-width: 600px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -123,6 +131,13 @@
             <textarea id="inputText" class="type-box-text" placeholder="Click here and start typing..."></textarea>
         </div>
         <div id="startBtn" class="start-box">Start</div>
+        <div class="instructions">
+            <strong>How to use:</strong><br>
+            1. Type your text in the box above<br>
+            2. Click "Start" and click on the window where you want to type (Google Docs, etc.)<br>
+            3. Your text will be typed automatically where your cursor is placed<br>
+            <em style="color: #ffe4b5;">⚠️ Your browser may ask for permission to access clipboard</em>
+        </div>
     </div>
 
     <script>
@@ -135,7 +150,10 @@
             const inputText = document.getElementById('inputText');
             const text = inputText.value;
             
-            if (!text) return;
+            if (!text) {
+                alert('Please type something first!');
+                return;
+            }
             
             startBtn.disabled = true;
             let countdown = 5;
@@ -148,37 +166,73 @@
                     startBtn.textContent = countdown;
                 } else {
                     clearInterval(countdownInterval);
-                    startTyping(text, inputText, startBtn);
+                    startTyping(text, startBtn);
                 }
             }, 1000);
         });
 
-        function startTyping(text, textbox, button) {
+        async function startTyping(text, button) {
             isTyping = true;
             button.textContent = 'Start';
             
-            // Clear the textbox
-            textbox.value = '';
-            
-            // 40 words per minute = 40 words / 60 seconds = 0.667 words per second
-            // Average word length is 5 characters
-            // So: 0.667 words/sec × 5 chars/word = 3.333 chars/second = 300ms per character
-            const charDelay = 300; // milliseconds per character
-            let charIndex = 0;
-            
-            function typeChar() {
-                if (charIndex < text.length) {
-                    textbox.value += text[charIndex];
-                    charIndex++;
-                    setTimeout(typeChar, charDelay);
-                } else {
-                    // Typing finished
-                    isTyping = false;
-                    button.disabled = false;
+            try {
+                // Copy text to clipboard
+                await navigator.clipboard.writeText(text);
+                
+                // Simulate typing by pasting the text with delays between characters
+                const charDelay = 50; // milliseconds between keystrokes
+                
+                for (let i = 0; i < text.length; i++) {
+                    // Simulate individual keypress
+                    const char = text[i];
+                    
+                    // Type the character
+                    if (char === '\n') {
+                        // Simulate Enter key for newlines
+                        simulateKey('Enter');
+                    } else {
+                        simulateKey(char);
+                    }
+                    
+                    await new Promise(resolve => setTimeout(resolve, charDelay));
                 }
+                
+            } catch (err) {
+                console.error('Clipboard access failed:', err);
+                alert('Clipboard access was denied. Make sure to:\n1. Allow clipboard permissions\n2. Click on the target window (Google Docs, etc.) before starting');
             }
             
-            typeChar();
+            // Typing finished
+            isTyping = false;
+            button.disabled = false;
+        }
+
+        function simulateKey(key) {
+            // Create and dispatch keyboard events to simulate typing
+            const keyDownEvent = new KeyboardEvent('keydown', {
+                key: key,
+                code: key,
+                bubbles: true,
+                cancelable: true
+            });
+            
+            const keyPressEvent = new KeyboardEvent('keypress', {
+                key: key,
+                code: key,
+                bubbles: true,
+                cancelable: true
+            });
+            
+            const keyUpEvent = new KeyboardEvent('keyup', {
+                key: key,
+                code: key,
+                bubbles: true,
+                cancelable: true
+            });
+            
+            document.activeElement.dispatchEvent(keyDownEvent);
+            document.activeElement.dispatchEvent(keyPressEvent);
+            document.activeElement.dispatchEvent(keyUpEvent);
         }
     </script>
 </body>

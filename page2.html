@@ -98,6 +98,32 @@
             cursor: pointer;
             transition: transform 0.2s;
         }
+
+        .button-row {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .small-type-box {
+            width: 4in;
+            height: 2in;
+            background-color: white;
+            border: 2px solid black;
+            color: black;
+            font-family: Arial, sans-serif;
+            font-size: 24px;
+            padding: 10px;
+            resize: none;
+            box-sizing: border-box;
+        }
+
+        .small-type-box:focus {
+            outline: none;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
         
         .start-box:hover {
             transform: scale(1.05);
@@ -130,7 +156,10 @@
         <div class="type-box">
             <textarea id="inputText" class="type-box-text" placeholder="Click here and start typing..."></textarea>
         </div>
-        <div id="startBtn" class="start-box">Start</div>
+        <div class="button-row">
+            <div id="startBtn" class="start-box">Start</div>
+            <textarea class="small-type-box" placeholder="Type here..."></textarea>
+        </div>
         <div class="instructions">
             <strong>How to use:</strong><br>
             1. Type your text in the box above<br>

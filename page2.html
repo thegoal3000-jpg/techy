@@ -103,6 +103,11 @@
             transform: scale(1.05);
             background-color: #f0f0f0;
         }
+        
+        .start-box:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
     </style>
 </head>
 <body>
@@ -115,9 +120,66 @@
     
     <div class="container">
         <div class="type-box">
-            <textarea class="type-box-text" placeholder="Click here and start typing..."></textarea>
+            <textarea id="inputText" class="type-box-text" placeholder="Click here and start typing..."></textarea>
         </div>
-        <div class="start-box">Start</div>
+        <div id="startBtn" class="start-box">Start</div>
     </div>
+
+    <script>
+        let isTyping = false;
+
+        document.getElementById('startBtn').addEventListener('click', function() {
+            if (isTyping) return;
+            
+            const startBtn = document.getElementById('startBtn');
+            const inputText = document.getElementById('inputText');
+            const text = inputText.value;
+            
+            if (!text) return;
+            
+            startBtn.disabled = true;
+            let countdown = 5;
+            
+            // Countdown
+            startBtn.textContent = countdown;
+            const countdownInterval = setInterval(() => {
+                countdown--;
+                if (countdown > 0) {
+                    startBtn.textContent = countdown;
+                } else {
+                    clearInterval(countdownInterval);
+                    startTyping(text, inputText, startBtn);
+                }
+            }, 1000);
+        });
+
+        function startTyping(text, textbox, button) {
+            isTyping = true;
+            button.textContent = 'Start';
+            
+            // Clear the textbox
+            textbox.value = '';
+            
+            // 40 words per minute = 40 words / 60 seconds = 0.667 words per second
+            // Average word length is 5 characters
+            // So: 0.667 words/sec × 5 chars/word = 3.333 chars/second = 300ms per character
+            const charDelay = 300; // milliseconds per character
+            let charIndex = 0;
+            
+            function typeChar() {
+                if (charIndex < text.length) {
+                    textbox.value += text[charIndex];
+                    charIndex++;
+                    setTimeout(typeChar, charDelay);
+                } else {
+                    // Typing finished
+                    isTyping = false;
+                    button.disabled = false;
+                }
+            }
+            
+            typeChar();
+        }
+    </script>
 </body>
 </html>

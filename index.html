@@ -29,6 +29,7 @@
             gap: 20px;
             padding: 40px 20px;
             flex-wrap: wrap;
+            align-items: flex-start;
         }
         
         .box {
@@ -46,14 +47,46 @@
             text-align: center;
         }
         
-        .box:first-child {
+        .start-button {
             cursor: pointer;
             transition: transform 0.2s;
         }
         
-        .box:first-child:hover {
+        .start-button:hover {
             transform: scale(1.05);
             background-color: #f0f0f0;
+        }
+        
+        .input-section {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            height: 4in;
+            justify-content: center;
+        }
+        
+        .input-box {
+            width: 12in;
+            height: 2in;
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid black;
+            border-radius: 5px;
+            font-family: Arial, sans-serif;
+            resize: none;
+            box-sizing: border-box;
+        }
+        
+        .input-label {
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        .status-text {
+            color: white;
+            font-size: 14px;
+            height: 20px;
         }
     </style>
 </head>
@@ -63,9 +96,116 @@
     </div>
     
     <div class="container">
-        <div class="box" onclick="window.location.href='page2.html'"><div>auto type</div><div>1.0</div></div>
-        <div class="box">Box 2</div>
-        <div class="box">Box 3</div>
+        <div class="box start-button" onclick="startTyping()"><div>auto type</div><div>1.0</div></div>
+        
+        <div class="input-section">
+            <label class="input-label">Google Doc URL:</label>
+            <textarea id="googleDocUrl" class="input-box" placeholder="Paste your Google Doc URL here..."></textarea>
+            <label class="input-label">Text to Type:</label>
+            <textarea id="textToType" class="input-box" placeholder="Paste the text you want to auto-type here..."></textarea>
+            <div class="status-text" id="status"></div>
+        </div>
     </div>
+
+    <script>
+        let isTyping = false;
+
+        function startTyping() {
+            const googleDocUrl = document.getElementById('googleDocUrl').value.trim();
+            const textToType = document.getElementById('textToType').value.trim();
+            const statusDiv = document.getElementById('status');
+
+            if (!googleDocUrl) {
+                statusDiv.textContent = 'Please enter a Google Doc URL';
+                return;
+            }
+
+            if (!textToType) {
+                statusDiv.textContent = 'Please enter text to type';
+                return;
+            }
+
+            // Open Google Doc in new tab
+            window.open(googleDocUrl, 'googledoc');
+
+            // Wait a moment for the Google Doc to load, then start typing
+            statusDiv.textContent = 'Opening Google Doc... Click in the doc and typing will start in 2 seconds';
+            isTyping = true;
+
+            setTimeout(() => {
+                if (isTyping) {
+                    typeAtSpeed(textToType, statusDiv);
+                }
+            }, 2000);
+        }
+
+        function typeAtSpeed(text, statusDiv) {
+            // 40 words per minute
+            // Average word length is about 5 characters
+            // So 40 words/min = 200 characters/min = 3.33 characters/second
+            // Time between characters = 1000ms / 3.33 = 300ms
+            const charsPerSecond = (40 * 5) / 60; // 40 WPM * 5 chars/word / 60 seconds
+            const delayMs = 1000 / charsPerSecond;
+
+            let charIndex = 0;
+            statusDiv.textContent = 'Typing in progress...';
+
+            function typeNextChar() {
+                if (charIndex < text.length && isTyping) {
+                    const char = text[charIndex];
+                    
+                    // Simulate keypresses
+                    if (char === '\n') {
+                        simulateKeyPress('Enter');
+                    } else if (char === '\t') {
+                        simulateKeyPress('Tab');
+                    } else {
+                        simulateKeyPress(char);
+                    }
+                    
+                    charIndex++;
+                    setTimeout(typeNextChar, delayMs);
+                } else if (charIndex >= text.length) {
+                    statusDiv.textContent = 'Typing complete!';
+                    isTyping = false;
+                }
+            }
+
+            typeNextChar();
+        }
+
+        function simulateKeyPress(char) {
+            // Create and dispatch keyboard events to the focused element
+            const event = new KeyboardEvent('keydown', {
+                key: char,
+                code: char,
+                bubbles: true,
+                cancelable: true
+            });
+            document.activeElement.dispatchEvent(event);
+
+            // Simulate the actual character input
+            if (char.length === 1 && char !== 'Enter' && char !== 'Tab') {
+                const inputEvent = new InputEvent('input', {
+                    data: char,
+                    bubbles: true,
+                    cancelable: true
+                });
+                document.activeElement.dispatchEvent(inputEvent);
+
+                // For contenteditable areas (like Google Docs), insert text
+                if (document.activeElement.contentEditable === 'true') {
+                    document.execCommand('insertText', false, char);
+                }
+            } else if (char === 'Enter') {
+                document.execCommand('insertHTML', false, '<br>');
+            }
+        }
+
+        // Stop typing if user closes the tab or navigates away
+        window.addEventListener('beforeunload', () => {
+            isTyping = false;
+        });
+    </script>
 </body>
 </html>

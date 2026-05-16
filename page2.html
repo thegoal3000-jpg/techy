@@ -134,6 +134,11 @@
             opacity: 0.5;
             cursor: not-allowed;
         }
+
+        .start-box.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
         
         .instructions {
             color: white;
@@ -158,14 +163,13 @@
         </div>
         <div class="button-row">
             <div id="startBtn" class="start-box">Start</div>
-            <textarea class="small-type-box" placeholder="Type here..."></textarea>
+            <textarea id="outputText" class="small-type-box" placeholder="Typed text appears here..."></textarea>
         </div>
         <div class="instructions">
             <strong>How to use:</strong><br>
             1. Type your text in the box above<br>
-            2. Click "Start" and click on the window where you want to type (Google Docs, etc.)<br>
-            3. Your text will be typed automatically where your cursor is placed<br>
-            <em style="color: #ffe4b5;">⚠️ Your browser may ask for permission to access clipboard</em>
+            2. Click "Start"<br>
+            3. After 5 seconds, your text will type into the small box at 40 words per minute
         </div>
     </div>
 
@@ -184,7 +188,7 @@
                 return;
             }
             
-            startBtn.disabled = true;
+            startBtn.classList.add('disabled');
             let countdown = 5;
             
             // Countdown
@@ -203,65 +207,20 @@
         async function startTyping(text, button) {
             isTyping = true;
             button.textContent = 'Start';
-            
-            try {
-                // Copy text to clipboard
-                await navigator.clipboard.writeText(text);
-                
-                // Simulate typing by pasting the text with delays between characters
-                const charDelay = 50; // milliseconds between keystrokes
-                
-                for (let i = 0; i < text.length; i++) {
-                    // Simulate individual keypress
-                    const char = text[i];
-                    
-                    // Type the character
-                    if (char === '\n') {
-                        // Simulate Enter key for newlines
-                        simulateKey('Enter');
-                    } else {
-                        simulateKey(char);
-                    }
-                    
-                    await new Promise(resolve => setTimeout(resolve, charDelay));
-                }
-                
-            } catch (err) {
-                console.error('Clipboard access failed:', err);
-                alert('Clipboard access was denied. Make sure to:\n1. Allow clipboard permissions\n2. Click on the target window (Google Docs, etc.) before starting');
-            }
-            
-            // Typing finished
-            isTyping = false;
-            button.disabled = false;
-        }
 
-        function simulateKey(key) {
-            // Create and dispatch keyboard events to simulate typing
-            const keyDownEvent = new KeyboardEvent('keydown', {
-                key: key,
-                code: key,
-                bubbles: true,
-                cancelable: true
-            });
-            
-            const keyPressEvent = new KeyboardEvent('keypress', {
-                key: key,
-                code: key,
-                bubbles: true,
-                cancelable: true
-            });
-            
-            const keyUpEvent = new KeyboardEvent('keyup', {
-                key: key,
-                code: key,
-                bubbles: true,
-                cancelable: true
-            });
-            
-            document.activeElement.dispatchEvent(keyDownEvent);
-            document.activeElement.dispatchEvent(keyPressEvent);
-            document.activeElement.dispatchEvent(keyUpEvent);
+            const outputText = document.getElementById('outputText');
+            const charDelay = 1000 / ((40 * 5) / 60);
+
+            outputText.value = '';
+            outputText.focus();
+
+            for (let i = 0; i < text.length && isTyping; i++) {
+                outputText.value += text[i];
+                await new Promise(resolve => setTimeout(resolve, charDelay));
+            }
+
+            isTyping = false;
+            button.classList.remove('disabled');
         }
     </script>
 </body>

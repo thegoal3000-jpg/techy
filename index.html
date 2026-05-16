@@ -46,6 +46,20 @@
             flex-direction: column;
             text-align: center;
         }
+
+        .box-link {
+            text-decoration: none;
+        }
+
+        .box-link .box {
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .box-link .box:hover {
+            transform: scale(1.05);
+            background-color: #f0f0f0;
+        }
     </style>
 </head>
 <body>
@@ -54,7 +68,9 @@
     </div>
     
     <div class="container">
-        <div class="box"><div>auto type</div><div>1.0</div></div>
+        <a class="box-link" href="page2.html">
+            <div class="box"><div>auto type</div><div>1.0</div></div>
+        </a>
     </div>
 </body>
 </html>

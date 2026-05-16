@@ -84,23 +84,6 @@
             outline: none;
         }
 
-        .doc-url-box {
-            width: 12in;
-            height: 0.6in;
-            background-color: white;
-            border: 2px solid black;
-            color: black;
-            font-family: Arial, sans-serif;
-            font-size: 20px;
-            padding: 10px;
-            box-sizing: border-box;
-        }
-
-        .doc-url-box:focus {
-            outline: none;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-        }
-        
         .start-box {
             width: 4in;
             height: 2in;
@@ -175,20 +158,19 @@
     </div>
     
     <div class="container">
-        <input id="googleDocUrl" class="doc-url-box" type="url" placeholder="Type your Google Doc address here...">
         <div class="type-box">
             <textarea id="inputText" class="type-box-text" placeholder="Click here and start typing..."></textarea>
         </div>
         <div class="button-row">
             <div id="startBtn" class="start-box">Start</div>
-            <textarea id="outputText" class="small-type-box" placeholder="Typed text appears here..."></textarea>
+            <textarea id="googleDocUrl" class="small-type-box" placeholder="Google Doc address..."></textarea>
         </div>
         <div class="instructions">
             <strong>How to use:</strong><br>
-            1. Type your Google Doc address<br>
-            2. Type your text in the big box<br>
+            1. Type your text in the big box<br>
+            2. Type your Google Doc address in the small box<br>
             3. Click "Start"<br>
-            4. After 5 seconds, your doc opens and the small box previews the typing at 40 words per minute
+            4. After 5 seconds, your doc opens and your text is copied
         </div>
     </div>
 
@@ -228,16 +210,13 @@
                     startBtn.textContent = countdown;
                 } else {
                     clearInterval(countdownInterval);
-                    startTyping(text, startBtn, docUrl, docWindow);
+                    openDocWithText(text, startBtn, docUrl, docWindow);
                 }
             }, 1000);
         });
 
-        async function startTyping(text, button, docUrl, docWindow) {
+        async function openDocWithText(text, button, docUrl, docWindow) {
             button.textContent = 'Start';
-
-            const outputText = document.getElementById('outputText');
-            const charDelay = 1000 / ((40 * 5) / 60);
 
             if (docWindow) {
                 docWindow.location.href = docUrl;
@@ -247,14 +226,6 @@
                 await navigator.clipboard.writeText(text);
             } catch (err) {
                 console.warn('Could not copy text to clipboard:', err);
-            }
-
-            outputText.value = '';
-            outputText.focus();
-
-            for (let i = 0; i < text.length && isTyping; i++) {
-                outputText.value += text[i];
-                await new Promise(resolve => setTimeout(resolve, charDelay));
             }
 
             isTyping = false;

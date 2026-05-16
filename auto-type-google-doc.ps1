@@ -1,7 +1,7 @@
 param(
     [string]$DocUrl,
     [int]$WordsPerMinute = 60,
-    [int]$StartDelaySeconds = 5
+    [int]$StartDelaySeconds = 3
 )
 
 Add-Type -AssemblyName System.Windows.Forms

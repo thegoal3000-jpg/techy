@@ -3,249 +3,136 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GPTZero - AI Detector</title>
+  <title>GPTZero Style AI Detector</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --primary: #00d4aa;
-      --ai: #ef4444;
-      --human: #10b981;
+    body { font-family: 'Inter', sans-serif; background: #050507; color: #f1f1f1; margin:0; padding:20px; }
+    .container { max-width: 900px; margin: 40px auto; }
+    h1 { font-family: 'Space Grotesk', sans-serif; text-align:center; font-size: 42px; }
+    .subtitle { text-align:center; color:#aaa; margin-bottom:30px; }
+    textarea { width:100%; min-height:360px; background:#0f0f14; border:1px solid #333; border-radius:16px; padding:24px; color:white; font-size:1.05rem; }
+    button { width:100%; padding:18px; font-size:1.2rem; font-weight:600; background:#00d4aa; color:black; border:none; border-radius:12px; margin-top:15px; cursor:pointer; }
+    .key-input { margin:15px 0; padding:12px; background:#1a1a1f; border-radius:8px; }
+    .results { margin-top:40px; display:none; }
+    .scores { display:flex; justify-content:center; gap:50px; flex-wrap:wrap; margin:30px 0; }
+    .circle {
+      width: 200px; height: 200px; border-radius:50%; display:flex; flex-direction:column; align-items:center; justify-content:center;
+      font-size:3.5rem; font-weight:700; border:18px solid;
     }
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body {
-      font-family: 'Inter', system-ui, sans-serif;
-      background: #050507;
-      color: #f1f1f1;
-    }
-    .header {
-      background: #0a0a0f;
-      border-bottom: 1px solid #1f1f23;
-      padding: 18px 40px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .logo {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 28px;
-      font-weight: 700;
-      color: var(--primary);
-    }
-
-    .main { max-width: 900px; margin: 50px auto; padding: 0 20px; }
-    h1 { font-family: 'Space Grotesk', sans-serif; font-size: 42px; text-align: center; margin-bottom: 10px; }
-    .subtitle { text-align: center; color: #aaa; font-size: 1.2rem; margin-bottom: 40px; }
-
-    textarea {
-      width: 100%;
-      min-height: 380px;
-      background: #0f0f14;
-      border: 1px solid #222;
-      border-radius: 16px;
-      padding: 24px;
-      color: #fff;
-      font-size: 1.05rem;
-      resize: vertical;
-    }
-    .char-info {
-      display: flex; justify-content: space-between; margin-top: 10px; color: #777; font-size: 0.95rem;
-    }
-
-    button {
-      width: 100%;
-      padding: 18px;
-      font-size: 1.2rem;
-      font-weight: 600;
-      background: linear-gradient(90deg, #00d4aa, #00f0c0);
-      color: #000;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      margin-top: 20px;
-    }
-
-    .results { display: none; margin-top: 50px; }
-    .scores-container {
-      display: flex;
-      justify-content: center;
-      gap: 60px;
-      flex-wrap: wrap;
-      margin: 40px 0;
-    }
-    .score-circle {
-      width: 210px;
-      height: 210px;
-      border-radius: 50%;
-      border: 22px solid #1a1a20;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      font-size: 3.8rem;
-      font-weight: 700;
-      text-align: center;
-    }
-    .score-label {
-      font-size: 1.1rem;
-      margin-top: 12px;
-      font-weight: 500;
-    }
-
-    .verdict {
-      text-align: center;
-      font-size: 1.8rem;
-      font-weight: 600;
-      margin: 30px 0 50px;
-    }
-
-    .sentence-box {
-      background: #0f0f14;
-      border-radius: 16px;
-      padding: 30px;
-      margin-top: 40px;
-    }
-    .sentence {
-      padding: 18px 22px;
-      margin: 12px 0;
-      border-radius: 12px;
-      border-left: 6px solid;
-      background: #14141a;
-    }
-    .sentence.ai { border-color: var(--ai); }
-    .sentence.human { border-color: var(--human); }
-    .sentence-info { margin-top: 8px; font-size: 0.88rem; color: #888; }
   </style>
 </head>
 <body>
 
-  <div class="header">
-    <div class="logo">GPTZero</div>
+<div class="container">
+  <h1>AI Detector</h1>
+  <p class="subtitle">High Accuracy Mode (Using AI Model)</p>
+
+  <div class="key-input">
+    <strong>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:</strong><br>
+    <input type="password" id="apiKey" placeholder="sk-or-v1-..." style="width:100%; padding:10px; margin-top:8px; background:#111; border:none; color:white; border-radius:6px;">
+    <small>Key will be saved only in your browser (localStorage)</small>
   </div>
 
-  <div class="main">
-    <h1>AI Detector</h1>
-    <p class="subtitle">Detect ChatGPT, Claude, Gemini, and other AI content</p>
+  <textarea id="inputText" placeholder="Paste your text here..."></textarea>
+  <button onclick="scanText()">🔍 Scan for AI</button>
 
-    <textarea id="inputText" placeholder="Paste your text here..."></textarea>
-    <div class="char-info">
-      <span id="charCount">0 characters</span>
-      <span>Minimum 50+ characters recommended</span>
-    </div>
-
-    <button onclick="scanForAI()">Scan for AI</button>
-
-    <div id="loader" style="text-align:center; padding:80px; display:none; color:var(--primary);">
-      Analyzing Perplexity & Burstiness...
-    </div>
-
-    <div class="results" id="results"></div>
-  </div>
+  <div id="loader" style="text-align:center; margin-top:30px; display:none;">Analyzing with AI model...</div>
+  <div class="results" id="results"></div>
+</div>
 
 <script>
-function scanForAI() {
+const defaultKey = ''; // Leave empty
+
+async function scanText() {
+  let apiKey = document.getElementById('apiKey').value.trim();
   const text = document.getElementById('inputText').value.trim();
-  if (text.length < 50) {
-    alert("Please paste at least 50 characters for accurate detection.");
+
+  if (text.length < 80) {
+    alert("Please enter at least 80 characters.");
     return;
   }
+  if (!apiKey) {
+    apiKey = localStorage.getItem('openrouter_key') || defaultKey;
+  }
+  if (!apiKey) {
+    alert("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");
+    return;
+  }
+
+  // Save key for next time
+  localStorage.setItem('openrouter_key', apiKey);
 
   document.getElementById('loader').style.display = 'block';
   document.getElementById('results').style.display = 'none';
 
-  setTimeout(() => {
-    const result = gptZeroStyleAnalyze(text);
+  try {
+    const result = await callAI Detector(apiKey, text);
     showResults(result);
-    document.getElementById('loader').style.display = 'none';
-  }, 850);
+  } catch (e) {
+    alert("Error: " + e.message);
+  }
+
+  document.getElementById('loader').style.display = 'none';
 }
 
-function gptZeroStyleAnalyze(text) {
-  const sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
-  let totalScore = 0;
-  let aiSentences = 0;
-
-  const analyzed = sentences.map(sent => {
-    const lower = sent.toLowerCase();
-    let score = 40;
-
-    if (/furthermore|moreover|additionally|therefore|thus|hence|in conclusion|overall/gi.test(lower)) score += 28;
-    if (sent.split(' ').length >= 12 && sent.split(' ').length <= 28) score += 20;
-    if (/very very|really really|the fact that/gi.test(lower)) score += 22;
-
-    score = Math.min(95, score);
-    if (score > 65) aiSentences++;
-    totalScore += score;
-
-    return {
-      text: sent.trim(),
-      score: Math.round(score),
-      type: score > 70 ? 'ai' : score > 50 ? 'mixed' : 'human'
-    };
+async function callAI Detector(apiKey, text) {
+  const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${apiKey}`,
+      "HTTP-Referer": "https://your-site.com",
+      "X-Title": "AI Detector",
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      model: "qwen/qwen3-32b",   // Strong & cheap model
+      messages: [{
+        role: "system",
+        content: `You are an expert AI content detector. Analyze the text and return ONLY a valid JSON object with this format:
+{
+  "aiProbability": number (0-100),
+  "verdict": "Highly Likely AI" | "Likely AI" | "Mixed" | "Likely Human" | "Highly Likely Human",
+  "explanation": "short explanation",
+  "keyReasons": ["reason1", "reason2"]
+}`
+      },
+      {
+        role: "user",
+        content: `Analyze this text for AI generation:\n\n${text}`
+      }]
+    })
   });
 
-  const aiProbability = Math.round(totalScore / sentences.length);
-  const humanScore = 100 - aiProbability;
-
-  return {
-    aiProbability: aiProbability,
-    humanScore: humanScore,
-    sentences: analyzed
-  };
+  const data = await response.json();
+  const content = data.choices[0].message.content;
+  return JSON.parse(content);
 }
 
 function showResults(result) {
-  const aiColor = result.aiProbability > 60 ? 'var(--ai)' : '#888';
-  const humanColor = result.humanScore > 60 ? 'var(--human)' : '#888';
+  const color = result.aiProbability > 60 ? '#ef4444' : '#10b981';
 
   let html = `
-    <div class="scores-container">
-      <!-- AI Circle -->
+    <div class="scores">
       <div style="text-align:center;">
-        <div class="score-circle" style="color:${aiColor}; border-color:${aiColor}">
+        <div class="circle" style="color:${color}; border-color:${color}">
           ${result.aiProbability}%
-          <div class="score-label">AI Probability</div>
-        </div>
-      </div>
-
-      <!-- Human Circle -->
-      <div style="text-align:center;">
-        <div class="score-circle" style="color:${humanColor}; border-color:${humanColor}">
-          ${result.humanScore}%
-          <div class="score-label">Human Score</div>
+          <div style="font-size:1rem; margin-top:8px;">AI Probability</div>
         </div>
       </div>
     </div>
 
-    <div class="verdict" style="color: ${result.aiProbability > 65 ? 'var(--ai)' : 'var(--human)'}">
-      ${result.aiProbability > 75 ? '🔴 Highly Likely AI-Generated' : 
-        result.aiProbability > 55 ? '🟠 Mixed Content' : '🟢 Likely Human Written'}
-    </div>
+    <h2 style="text-align:center; color:${color}">${result.verdict}</h2>
+    <p style="text-align:center; margin:20px 0;">${result.explanation}</p>
 
-    <div class="sentence-box">
-      <h2 style="margin-bottom:20px;">Sentence Analysis</h2>
+    <h3>Key Reasons:</h3>
+    <ul>
+      ${result.keyReasons.map(r => `<li>${r}</li>`).join('')}
+    </ul>
   `;
 
-  result.sentences.forEach(s => {
-    const cls = s.type === 'ai' ? 'ai' : 'human';
-    html += `
-      <div class="sentence ${cls}">
-        ${s.text}
-        <div class="sentence-info">
-          ${s.type.toUpperCase()} • ${s.score}% AI likelihood
-        </div>
-      </div>
-    `;
-  });
-
-  html += `</div>`;
   document.getElementById('results').innerHTML = html;
   document.getElementById('results').style.display = 'block';
 }
-
-// Character counter
-document.getElementById('inputText').addEventListener('input', function() {
-  document.getElementById('charCount').textContent = this.value.length + " characters";
-});
 </script>
 </body>
 </html>

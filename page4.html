@@ -24,9 +24,6 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      position: sticky;
-      top: 0;
-      z-index: 100;
     }
     .logo {
       font-family: 'Space Grotesk', sans-serif;
@@ -68,24 +65,37 @@
     }
 
     .results { display: none; margin-top: 50px; }
+    .scores-container {
+      display: flex;
+      justify-content: center;
+      gap: 60px;
+      flex-wrap: wrap;
+      margin: 40px 0;
+    }
     .score-circle {
-      width: 240px;
-      height: 240px;
-      margin: 30px auto;
+      width: 210px;
+      height: 210px;
       border-radius: 50%;
-      border: 24px solid #1a1a20;
+      border: 22px solid #1a1a20;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      font-size: 4.5rem;
+      font-size: 3.8rem;
       font-weight: 700;
+      text-align: center;
     }
+    .score-label {
+      font-size: 1.1rem;
+      margin-top: 12px;
+      font-weight: 500;
+    }
+
     .verdict {
       text-align: center;
-      font-size: 1.7rem;
+      font-size: 1.8rem;
       font-weight: 600;
-      margin: 20px 0 40px;
+      margin: 30px 0 50px;
     }
 
     .sentence-box {
@@ -149,43 +159,31 @@ function scanForAI() {
   }, 850);
 }
 
-// Improved GPTZero-style detection (Perplexity + Burstiness simulation)
 function gptZeroStyleAnalyze(text) {
   const sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
-  let totalPerplexity = 0;
+  let totalScore = 0;
   let aiSentences = 0;
-  let analyzed = [];
 
-  sentences.forEach(sent => {
-    const words = sent.trim().split(/\s+/);
-    const wordCount = words.length;
-    let score = 40; // base
+  const analyzed = sentences.map(sent => {
+    const lower = sent.toLowerCase();
+    let score = 40;
 
-    // Perplexity simulation (predictability)
-    const hasCommonAITransitions = /furthermore|moreover|additionally|therefore|thus|hence|in conclusion|overall|it is important/gi.test(sent);
-    if (hasCommonAITransitions) score += 28;
-
-    // Burstiness simulation (sentence length variation)
-    if (wordCount >= 12 && wordCount <= 28) score += 22;           // uniform length = more AI-like
-    if (wordCount > 35) score += 12;
-
-    // Repetition
-    if (/very very|really really|the fact that/gi.test(sent)) score += 20;
+    if (/furthermore|moreover|additionally|therefore|thus|hence|in conclusion|overall/gi.test(lower)) score += 28;
+    if (sent.split(' ').length >= 12 && sent.split(' ').length <= 28) score += 20;
+    if (/very very|really really|the fact that/gi.test(lower)) score += 22;
 
     score = Math.min(95, score);
-
     if (score > 65) aiSentences++;
+    totalScore += score;
 
-    totalPerplexity += score;
-
-    analyzed.push({
+    return {
       text: sent.trim(),
       score: Math.round(score),
       type: score > 70 ? 'ai' : score > 50 ? 'mixed' : 'human'
-    });
+    };
   });
 
-  const aiProbability = Math.round(totalPerplexity / sentences.length);
+  const aiProbability = Math.round(totalScore / sentences.length);
   const humanScore = 100 - aiProbability;
 
   return {
@@ -196,17 +194,29 @@ function gptZeroStyleAnalyze(text) {
 }
 
 function showResults(result) {
-  const color = result.aiProbability > 65 ? 'var(--ai)' : 'var(--human)';
+  const aiColor = result.aiProbability > 60 ? 'var(--ai)' : '#888';
+  const humanColor = result.humanScore > 60 ? 'var(--human)' : '#888';
 
   let html = `
-    <div style="text-align:center;">
-      <div class="score-circle" style="color:${color}; border-color:${color}">
-        ${result.aiProbability}%
-        <div style="font-size:1.1rem; margin-top:10px; color:#ccc;">AI Probability</div>
+    <div class="scores-container">
+      <!-- AI Circle -->
+      <div style="text-align:center;">
+        <div class="score-circle" style="color:${aiColor}; border-color:${aiColor}">
+          ${result.aiProbability}%
+          <div class="score-label">AI Probability</div>
+        </div>
+      </div>
+
+      <!-- Human Circle -->
+      <div style="text-align:center;">
+        <div class="score-circle" style="color:${humanColor}; border-color:${humanColor}">
+          ${result.humanScore}%
+          <div class="score-label">Human Score</div>
+        </div>
       </div>
     </div>
 
-    <div class="verdict" style="color:${color}">
+    <div class="verdict" style="color: ${result.aiProbability > 65 ? 'var(--ai)' : 'var(--human)'}">
       ${result.aiProbability > 75 ? '🔴 Highly Likely AI-Generated' : 
         result.aiProbability > 55 ? '🟠 Mixed Content' : '🟢 Likely Human Written'}
     </div>

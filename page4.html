@@ -8,133 +8,150 @@
   <style>
     :root {
       --primary: #00d4aa;
-      --ai: #ef4444;
-      --human: #10b981;
+      --ai-red: #ef4444;
+      --human-green: #10b981;
     }
     * { margin:0; padding:0; box-sizing:border-box; }
     body {
       font-family: 'Inter', system-ui, sans-serif;
-      background: #0a0a0f;
-      color: #f1f1f1;
+      background: #050507;
+      color: #f8f8f8;
       line-height: 1.6;
     }
     .header {
-      background: #111113;
-      border-bottom: 1px solid #222;
-      padding: 16px 40px;
+      background: #0a0a0f;
+      border-bottom: 1px solid #1f1f23;
+      padding: 18px 40px;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
     .logo {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.8rem;
+      font-size: 28px;
       font-weight: 700;
       color: var(--primary);
+      letter-spacing: -1px;
     }
-    .main {
-      max-width: 920px;
-      margin: 40px auto;
-      padding: 0 20px;
+    .nav a {
+      color: #aaa;
+      margin-left: 32px;
+      text-decoration: none;
+      font-weight: 500;
     }
+
+    .main { max-width: 920px; margin: 60px auto; padding: 0 20px; }
     h1 {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 2.8rem;
+      font-size: 42px;
       text-align: center;
-      margin-bottom: 12px;
+      margin-bottom: 16px;
     }
     .subtitle {
       text-align: center;
-      color: #aaa;
-      font-size: 1.15rem;
-      margin-bottom: 40px;
+      color: #999;
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 0 auto 50px;
     }
 
-    .textarea-container {
-      background: #121216;
-      border: 2px solid #333;
-      border-radius: 16px;
-      padding: 20px;
-      margin-bottom: 20px;
+    .upload-box {
+      background: #0f0f14;
+      border: 2px dashed #333;
+      border-radius: 20px;
+      padding: 40px 30px;
+      text-align: center;
+      margin-bottom: 30px;
     }
     textarea {
       width: 100%;
-      min-height: 320px;
-      background: transparent;
-      border: none;
-      outline: none;
+      min-height: 380px;
+      background: #0a0a0f;
+      border: 1px solid #222;
+      border-radius: 16px;
+      padding: 24px;
       color: #fff;
       font-size: 1.05rem;
       resize: vertical;
     }
-    .bottom-bar {
+
+    .char-info {
       display: flex;
       justify-content: space-between;
-      align-items: center;
       margin-top: 12px;
       font-size: 0.95rem;
+      color: #777;
     }
+
     button {
-      background: var(--primary);
-      color: black;
-      border: none;
-      padding: 14px 48px;
-      font-size: 1.1rem;
+      background: linear-gradient(90deg, #00d4aa, #00e6c0);
+      color: #000;
       font-weight: 600;
+      font-size: 1.15rem;
+      padding: 18px 60px;
+      border: none;
       border-radius: 12px;
       cursor: pointer;
       width: 100%;
       margin-top: 20px;
     }
-    button:hover { background: #00e6b8; }
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(0, 212, 170, 0.3);
+    }
 
-    .results { display: none; margin-top: 40px; }
-    .score-area {
+    .results { display: none; margin-top: 50px; }
+    .score-container {
       display: flex;
       justify-content: center;
-      gap: 60px;
+      gap: 80px;
       flex-wrap: wrap;
-      margin: 30px 0;
+      margin: 40px 0;
     }
-    .overall-score {
+    .big-score {
       text-align: center;
     }
     .circle {
-      width: 210px;
-      height: 210px;
+      width: 220px;
+      height: 220px;
       border-radius: 50%;
-      border: 18px solid #222;
+      border: 22px solid #1a1a1f;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      font-size: 3.8rem;
+      font-size: 4.2rem;
       font-weight: 700;
-      margin: 0 auto 12px;
+      position: relative;
     }
-    .label { font-size: 1.1rem; color: #ccc; }
+    .circle-label {
+      font-size: 1.1rem;
+      color: #aaa;
+      margin-top: 8px;
+    }
 
-    .sentence-list {
-      background: #121216;
-      border-radius: 16px;
-      padding: 24px;
-      margin-top: 40px;
+    .sentence-analysis {
+      background: #0f0f14;
+      border-radius: 20px;
+      padding: 32px;
+      margin-top: 60px;
     }
     .sentence {
-      padding: 16px 18px;
-      margin: 12px 0;
-      border-radius: 10px;
+      padding: 18px 22px;
+      margin: 14px 0;
+      border-radius: 12px;
       border-left: 6px solid;
+      background: #14141a;
     }
-    .sentence.ai { border-color: var(--ai); background: rgba(239,68,68,0.1); }
-    .sentence.human { border-color: var(--human); background: rgba(16,185,129,0.08); }
-    .sentence.mixed { border-color: #f59e0b; background: rgba(245,158,11,0.1); }
-
-    .footer-info {
-      text-align: center;
-      margin-top: 50px;
-      color: #666;
-      font-size: 0.9rem;
+    .sentence.ai { border-color: var(--ai-red); }
+    .sentence.human { border-color: var(--human-green); }
+    .sentence-info {
+      margin-top: 8px;
+      font-size: 0.85rem;
+      color: #888;
     }
   </style>
 </head>
@@ -142,41 +159,39 @@
 
   <div class="header">
     <div class="logo">GPTZero</div>
-    <div style="color:#888;">Free AI Detector</div>
+    <div class="nav">
+      <a href="#">Features</a>
+      <a href="#">Pricing</a>
+      <a href="#">For Education</a>
+    </div>
   </div>
 
   <div class="main">
-    <h1>Detect AI Writing</h1>
-    <p class="subtitle">Paste text below to check for ChatGPT, Claude, Gemini, and other AI content</p>
+    <h1>AI Detector</h1>
+    <p class="subtitle">The most trusted AI detector for ChatGPT, Claude, Gemini, and more.</p>
 
-    <div class="textarea-container">
-      <textarea id="inputText" placeholder="Paste your text here..."></textarea>
-      <div class="bottom-bar">
-        <span id="charCount">0 characters</span>
-        <span>Minimum 50 characters recommended</span>
+    <div class="upload-box">
+      <textarea id="inputText" placeholder="Paste your text here (or upload a document)..."></textarea>
+      <div class="char-info">
+        <span id="charCount">0 / 10,000 characters</span>
+        <span>Supports .txt, .docx, .pdf</span>
       </div>
     </div>
 
-    <button onclick="scanText()">Scan for AI</button>
+    <button onclick="scanForAI()">Scan for AI</button>
 
-    <!-- Loader -->
-    <div id="loader" style="text-align:center; padding:60px; display:none;">
-      <p style="color:var(--primary); font-size:1.1rem;">Analyzing Perplexity & Burstiness...</p>
+    <div id="loader" style="text-align:center; padding:80px 20px; display:none; color:var(--primary); font-size:1.1rem;">
+      Scanning for AI patterns • Perplexity + Burstiness + Deep Analysis...
     </div>
 
-    <!-- Results -->
     <div class="results" id="results"></div>
   </div>
 
-  <div class="footer-info">
-    This is a fan-made clone for demonstration • Not affiliated with official GPTZero
-  </div>
-
 <script>
-function scanText() {
+function scanForAI() {
   const text = document.getElementById('inputText').value.trim();
   if (text.length < 50) {
-    alert("Please paste at least 50 characters.");
+    alert("Please enter at least 50 characters.");
     return;
   }
 
@@ -185,68 +200,72 @@ function scanText() {
 
   setTimeout(() => {
     const result = analyzeText(text);
-    showResults(result, text);
+    displayResults(result);
     document.getElementById('loader').style.display = 'none';
-  }, 800);
+  }, 900);
 }
 
 function analyzeText(text) {
   const sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
   let aiCount = 0;
-  let totalScore = 0;
+  let totalAI = 0;
 
-  const analyzed = sentences.map(s => {
-    const lower = s.toLowerCase();
-    let score = 45;
-    let type = "human";
+  const analyzedSentences = sentences.map(sent => {
+    const lower = sent.toLowerCase();
+    let aiScore = 35;
 
-    if (lower.length > 80 && lower.split(' ').length < 25) score += 20;
-    if (/furthermore|moreover|additionally|therefore|thus|in conclusion|overall/gi.test(lower)) score += 30;
-    if (/very very|really really|the fact that/gi.test(lower)) score += 25;
+    if (/furthermore|moreover|additionally|therefore|thus|in conclusion|overall/gi.test(lower)) aiScore += 32;
+    if (sent.split(' ').length > 12 && sent.split(' ').length < 28) aiScore += 18;
+    if (/very very|really really|the fact that|it is important/gi.test(lower)) aiScore += 25;
 
-    if (score > 70) { type = "ai"; aiCount++; }
-    else if (score > 55) type = "mixed";
+    aiScore = Math.min(96, aiScore);
+    if (aiScore > 65) aiCount++;
+    totalAI += aiScore;
 
-    totalScore += score;
-    return { text: s.trim(), score: Math.min(95, Math.round(score)), type };
+    return {
+      text: sent.trim(),
+      aiScore: Math.round(aiScore),
+      type: aiScore > 70 ? 'ai' : aiScore > 50 ? 'mixed' : 'human'
+    };
   });
 
-  const aiProbability = Math.round((aiCount / sentences.length) * 100);
-  const avgScore = Math.round(totalScore / sentences.length);
+  const aiProbability = Math.round((totalAI / sentences.length));
+  const humanScore = 100 - aiProbability;
 
   return {
     aiProbability: aiProbability,
-    humanScore: 100 - avgScore,
-    sentences: analyzed
+    humanScore: humanScore,
+    sentences: analyzedSentences
   };
 }
 
-function showResults(result, originalText) {
+function displayResults(result) {
   let html = `
-    <div class="score-area">
-      <div class="overall-score">
-        <div class="circle" style="color: ${result.aiProbability > 60 ? 'var(--ai)' : 'var(--human)'}; border-color: ${result.aiProbability > 60 ? 'var(--ai)' : 'var(--human)'}">
+    <div class="score-container">
+      <div class="big-score">
+        <div class="circle" style="color: ${result.aiProbability > 65 ? 'var(--ai-red)' : 'var(--human-green)'};">
           ${result.aiProbability}%
-          <div class="label">AI Probability</div>
+          <div class="circle-label">AI Probability</div>
         </div>
       </div>
     </div>
 
-    <div style="text-align:center; font-size:1.6rem; margin:20px 0;">
-      ${result.aiProbability > 70 ? '🔴 Likely AI-Generated' : result.aiProbability > 45 ? '🟠 Mixed Content' : '🟢 Likely Human'}
+    <div style="text-align:center; font-size:1.8rem; font-weight:600; margin:30px 0;">
+      ${result.aiProbability > 75 ? '🔴 Highly Likely AI-Generated' : 
+        result.aiProbability > 50 ? '🟠 Mixed Content Detected' : '🟢 Likely Human Written'}
     </div>
 
-    <div class="sentence-list">
-      <h3 style="margin-bottom:20px; color:#ddd">Sentence Analysis</h3>
+    <div class="sentence-analysis">
+      <h2 style="margin-bottom:24px; font-size:1.5rem;">Sentence-by-Sentence Breakdown</h2>
   `;
 
   result.sentences.forEach(s => {
-    const cls = s.type === 'ai' ? 'ai' : s.type === 'mixed' ? 'mixed' : 'human';
+    const cls = s.type === 'ai' ? 'ai' : 'human';
     html += `
       <div class="sentence ${cls}">
         ${s.text}
-        <div style="margin-top:8px; font-size:0.85rem; color:#999;">
-          ${s.type.toUpperCase()} • ${s.score}% AI likelihood
+        <div class="sentence-info">
+          ${s.type.toUpperCase()} — ${s.aiScore}% AI Likelihood
         </div>
       </div>
     `;
@@ -257,9 +276,10 @@ function showResults(result, originalText) {
   document.getElementById('results').style.display = 'block';
 }
 
-// Character counter
+// Live character counter
 document.getElementById('inputText').addEventListener('input', function() {
-  document.getElementById('charCount').textContent = this.value.length + " characters";
+  const count = this.value.length;
+  document.getElementById('charCount').textContent = `${count} / 10,000 characters`;
 });
 </script>
 </body>

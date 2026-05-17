@@ -7,558 +7,123 @@
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   :root {
-    --bg: #0a0a0f;
-    --surface: #111118;
-    --surface2: #1a1a24;
-    --border: #2a2a3a;
-    --accent: #7c6bff;
-    --accent2: #a78bfa;
-    --accent-glow: rgba(124, 107, 255, 0.2);
-    --text: #f0eeff;
-    --text-muted: #7a7a9a;
-    --human: #34d399;
-    --human-bg: rgba(52, 211, 153, 0.1);
-    --human-border: rgba(52, 211, 153, 0.3);
-    --ai: #f87171;
-    --ai-bg: rgba(248, 113, 113, 0.1);
-    --ai-border: rgba(248, 113, 113, 0.3);
-    --mixed: #fbbf24;
-    --mixed-bg: rgba(251, 191, 36, 0.1);
-    --mixed-border: rgba(251, 191, 36, 0.3);
+    --bg: #0a0a0f; --surface: #111118; --surface2: #1a1a24; --border: #2a2a3a;
+    --accent: #7c6bff; --accent2: #a78bfa; --text: #f0eeff; --text-muted: #7a7a9a;
+    --human: #34d399; --human-bg: rgba(52,211,153,0.1); --human-border: rgba(52,211,153,0.3);
+    --ai: #f87171; --ai-bg: rgba(248,113,113,0.1); --ai-border: rgba(248,113,113,0.3);
+    --mixed: #fbbf24; --mixed-bg: rgba(251,191,36,0.1); --mixed-border: rgba(251,191,36,0.3);
     --radius: 14px;
   }
-
-  body {
-    font-family: 'Sora', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-
+  body { font-family: 'Sora', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
   body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background:
-      radial-gradient(ellipse 70% 50% at 10% -5%, rgba(52,211,153,0.07) 0%, transparent 55%),
-      radial-gradient(ellipse 60% 40% at 90% 100%, rgba(248,113,113,0.06) 0%, transparent 55%);
-    pointer-events: none;
-    z-index: 0;
+    content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background: radial-gradient(ellipse 70% 50% at 10% -5%, rgba(52,211,153,0.07) 0%, transparent 55%),
+                radial-gradient(ellipse 60% 40% at 90% 100%, rgba(248,113,113,0.06) 0%, transparent 55%);
   }
-
-  /* Header */
   header {
-    position: relative;
-    z-index: 10;
-    padding: 20px 40px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 1px solid var(--border);
-    background: rgba(10,10,15,0.8);
-    backdrop-filter: blur(12px);
+    position: relative; z-index: 10; padding: 20px 40px; display: flex; align-items: center;
+    justify-content: space-between; border-bottom: 1px solid var(--border);
+    background: rgba(10,10,15,0.8); backdrop-filter: blur(12px);
   }
-
   .back-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 36px;
-    height: 36px;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    background: var(--surface);
-    color: var(--text-muted);
-    font-size: 1rem;
-    text-decoration: none;
-    transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center; width: 36px; height: 36px;
+    border-radius: 8px; border: 1px solid var(--border); background: var(--surface);
+    color: var(--text-muted); font-size: 1rem; text-decoration: none; transition: all 0.2s;
   }
-
-  .back-btn:hover {
-    border-color: var(--accent);
-    color: var(--text);
-  }
-
-  .logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 1.1rem;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-  }
-
-  .logo-icon {
-    width: 30px;
-    height: 30px;
-    background: linear-gradient(135deg, var(--human), #059669);
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-  }
-
+  .back-btn:hover { border-color: var(--accent); color: var(--text); }
+  .logo { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 700; letter-spacing: -0.02em; }
+  .logo-icon { width: 30px; height: 30px; background: linear-gradient(135deg, var(--human), #059669); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; }
   .logo span { color: var(--human); }
-
-  .badge {
-    font-size: 0.7rem;
-    font-weight: 600;
-    padding: 3px 10px;
-    border-radius: 20px;
-    background: rgba(52,211,153,0.1);
-    border: 1px solid rgba(52,211,153,0.25);
-    color: var(--human);
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-  }
-
-  /* Hero */
-  .hero {
-    position: relative;
-    z-index: 5;
-    text-align: center;
-    padding: 52px 20px 36px;
-  }
-
-  .hero-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 0.72rem;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--human);
-    background: var(--human-bg);
-    border: 1px solid var(--human-border);
-    padding: 5px 14px;
-    border-radius: 20px;
-    margin-bottom: 20px;
-  }
-
-  .hero-tag::before {
-    content: '';
-    width: 6px; height: 6px;
-    background: var(--human);
-    border-radius: 50%;
-    animation: blink 2s infinite;
-  }
-
-  @keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.3; }
-  }
-
-  h1 {
-    font-size: clamp(1.8rem, 4.5vw, 2.9rem);
-    font-weight: 700;
-    letter-spacing: -0.04em;
-    line-height: 1.1;
-    margin-bottom: 14px;
-  }
-
-  h1 .g {
-    background: linear-gradient(135deg, #fff 0%, var(--human) 70%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .hero-sub {
-    font-size: 0.95rem;
-    color: var(--text-muted);
-    max-width: 440px;
-    margin: 0 auto;
-    line-height: 1.7;
-    font-weight: 300;
-  }
-
-  /* Main tool */
-  .tool-wrap {
-    position: relative;
-    z-index: 5;
-    max-width: 860px;
-    margin: 36px auto 0;
-    padding: 0 20px 60px;
-  }
-
-  /* Input panel */
-  .input-panel {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    overflow: hidden;
-    margin-bottom: 16px;
-    transition: border-color 0.3s;
-  }
-
-  .input-panel:focus-within {
-    border-color: rgba(52,211,153,0.35);
-  }
-
-  .panel-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 11px 16px;
-    border-bottom: 1px solid var(--border);
-    background: var(--surface2);
-  }
-
-  .panel-title {
-    font-size: 0.72rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--text-muted);
-  }
-
+  .badge { font-size: 0.7rem; font-weight: 600; padding: 3px 10px; border-radius: 20px; background: rgba(52,211,153,0.1); border: 1px solid rgba(52,211,153,0.25); color: var(--human); letter-spacing: 0.05em; text-transform: uppercase; }
+  .hero { position: relative; z-index: 5; text-align: center; padding: 52px 20px 36px; }
+  .hero-tag { display: inline-flex; align-items: center; gap: 6px; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--human); background: var(--human-bg); border: 1px solid var(--human-border); padding: 5px 14px; border-radius: 20px; margin-bottom: 20px; }
+  .hero-tag::before { content: ''; width: 6px; height: 6px; background: var(--human); border-radius: 50%; animation: blink 2s infinite; }
+  @keyframes blink { 0%,100%{opacity:1}50%{opacity:0.3} }
+  h1 { font-size: clamp(1.8rem,4.5vw,2.9rem); font-weight: 700; letter-spacing: -0.04em; line-height: 1.1; margin-bottom: 14px; }
+  h1 .g { background: linear-gradient(135deg,#fff 0%,var(--human) 70%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .hero-sub { font-size: 0.95rem; color: var(--text-muted); max-width: 440px; margin: 0 auto; line-height: 1.7; font-weight: 300; }
+  .tool-wrap { position: relative; z-index: 5; max-width: 860px; margin: 36px auto 0; padding: 0 20px 60px; }
+  .input-panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 16px; transition: border-color 0.3s; }
+  .input-panel:focus-within { border-color: rgba(52,211,153,0.35); }
+  .panel-header { display: flex; align-items: center; justify-content: space-between; padding: 11px 16px; border-bottom: 1px solid var(--border); background: var(--surface2); }
+  .panel-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); }
   .panel-actions { display: flex; gap: 6px; }
-
-  .icon-btn {
-    font-family: 'Sora', sans-serif;
-    background: none;
-    border: none;
-    color: var(--text-muted);
-    cursor: pointer;
-    padding: 4px 8px;
-    border-radius: 6px;
-    font-size: 0.75rem;
-    transition: all 0.2s;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-
+  .icon-btn { font-family: 'Sora',sans-serif; background: none; border: none; color: var(--text-muted); cursor: pointer; padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; transition: all 0.2s; display: flex; align-items: center; gap: 4px; }
   .icon-btn:hover { background: var(--border); color: var(--text); }
-
-  textarea {
-    width: 100%;
-    min-height: 240px;
-    background: transparent;
-    border: none;
-    outline: none;
-    resize: none;
-    color: var(--text);
-    font-family: 'Sora', sans-serif;
-    font-size: 0.9rem;
-    line-height: 1.75;
-    padding: 18px;
-    font-weight: 300;
-  }
-
+  textarea { width: 100%; min-height: 240px; background: transparent; border: none; outline: none; resize: none; color: var(--text); font-family: 'Sora',sans-serif; font-size: 0.9rem; line-height: 1.75; padding: 18px; font-weight: 300; }
   textarea::placeholder { color: var(--text-muted); opacity: 0.5; }
-
-  .panel-footer {
-    padding: 8px 16px;
-    border-top: 1px solid var(--border);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 0.7rem;
-    color: var(--text-muted);
-    font-family: 'DM Mono', monospace;
-  }
-
-  /* Analyze button */
-  .btn-analyze {
-    font-family: 'Sora', sans-serif;
-    font-size: 0.95rem;
-    font-weight: 600;
-    padding: 14px 48px;
-    border-radius: 10px;
-    border: none;
-    background: linear-gradient(135deg, #059669 0%, var(--human) 100%);
-    color: #fff;
-    cursor: pointer;
-    transition: all 0.25s;
-    display: block;
-    margin: 0 auto 28px;
-    box-shadow: 0 0 28px rgba(52,211,153,0.2);
-    position: relative;
-    overflow: hidden;
-  }
-
-  .btn-analyze::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: rgba(255,255,255,0.12);
-    opacity: 0;
-    transition: opacity 0.2s;
-  }
-
+  .panel-footer { padding: 8px 16px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; font-size: 0.7rem; color: var(--text-muted); font-family: 'DM Mono',monospace; }
+  .btn-analyze { font-family: 'Sora',sans-serif; font-size: 0.95rem; font-weight: 600; padding: 14px 48px; border-radius: 10px; border: none; background: linear-gradient(135deg,#059669 0%,var(--human) 100%); color: #fff; cursor: pointer; transition: all 0.25s; display: block; margin: 0 auto 28px; box-shadow: 0 0 28px rgba(52,211,153,0.2); position: relative; overflow: hidden; }
+  .btn-analyze::before { content: ''; position: absolute; inset: 0; background: rgba(255,255,255,0.12); opacity: 0; transition: opacity 0.2s; }
   .btn-analyze:hover::before { opacity: 1; }
   .btn-analyze:hover { transform: translateY(-1px); box-shadow: 0 6px 36px rgba(52,211,153,0.3); }
   .btn-analyze:active { transform: translateY(0); }
   .btn-analyze:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-
-  /* Results */
-  .results {
-    display: none;
-    animation: fadeUp 0.4s ease;
-  }
-
+  .results { display: none; animation: fadeUp 0.4s ease; }
   .results.visible { display: block; }
-
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(12px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  /* Score card */
-  .score-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 28px 32px;
-    margin-bottom: 16px;
-    display: flex;
-    align-items: center;
-    gap: 32px;
-    flex-wrap: wrap;
-  }
-
-  .score-card.human { border-color: var(--human-border); background: linear-gradient(135deg, var(--surface) 60%, var(--human-bg)); }
-  .score-card.ai { border-color: var(--ai-border); background: linear-gradient(135deg, var(--surface) 60%, var(--ai-bg)); }
-  .score-card.mixed { border-color: var(--mixed-border); background: linear-gradient(135deg, var(--surface) 60%, var(--mixed-bg)); }
-
-  .score-dial {
-    position: relative;
-    width: 110px;
-    height: 110px;
-    flex-shrink: 0;
-  }
-
+  @keyframes fadeUp { from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)} }
+  .score-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px 32px; margin-bottom: 16px; display: flex; align-items: center; gap: 32px; flex-wrap: wrap; }
+  .score-card.human { border-color: var(--human-border); background: linear-gradient(135deg,var(--surface) 60%,var(--human-bg)); }
+  .score-card.ai    { border-color: var(--ai-border);    background: linear-gradient(135deg,var(--surface) 60%,var(--ai-bg)); }
+  .score-card.mixed { border-color: var(--mixed-border); background: linear-gradient(135deg,var(--surface) 60%,var(--mixed-bg)); }
+  .score-dial { position: relative; width: 110px; height: 110px; flex-shrink: 0; }
   .score-dial svg { width: 110px; height: 110px; transform: rotate(-90deg); }
-
   .score-dial-track { fill: none; stroke: var(--border); stroke-width: 8; }
-  .score-dial-fill { fill: none; stroke-width: 8; stroke-linecap: round; transition: stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1); }
-
-  .score-num {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.6rem;
-    font-weight: 700;
-    letter-spacing: -0.03em;
-    line-height: 1;
-  }
-
-  .score-num small {
-    font-size: 0.65rem;
-    font-weight: 500;
-    color: var(--text-muted);
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    margin-top: 2px;
-  }
-
+  .score-dial-fill  { fill: none; stroke-width: 8; stroke-linecap: round; transition: stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1); }
+  .score-num { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 1.6rem; font-weight: 700; letter-spacing: -0.03em; line-height: 1; }
+  .score-num small { font-size: 0.65rem; font-weight: 500; color: var(--text-muted); letter-spacing: 0.05em; text-transform: uppercase; margin-top: 2px; }
   .score-info { flex: 1; min-width: 200px; }
-
-  .score-verdict {
-    font-size: 1.4rem;
-    font-weight: 700;
-    letter-spacing: -0.03em;
-    margin-bottom: 6px;
-  }
-
-  .score-desc {
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    line-height: 1.6;
-    font-weight: 300;
-  }
-
-  .score-bars {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    min-width: 180px;
-  }
-
+  .score-verdict { font-size: 1.4rem; font-weight: 700; letter-spacing: -0.03em; margin-bottom: 6px; }
+  .score-desc { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; font-weight: 300; }
+  .score-bars { display: flex; flex-direction: column; gap: 10px; min-width: 180px; }
   .bar-item { display: flex; flex-direction: column; gap: 4px; }
-  .bar-label { display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--text-muted); font-family: 'DM Mono', monospace; }
+  .bar-label { display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--text-muted); font-family: 'DM Mono',monospace; }
   .bar-track { height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; }
   .bar-fill { height: 100%; border-radius: 3px; transition: width 1s cubic-bezier(.4,0,.2,1); width: 0%; }
   .bar-fill.human { background: var(--human); }
-  .bar-fill.ai { background: var(--ai); }
+  .bar-fill.ai    { background: var(--ai); }
   .bar-fill.mixed { background: var(--mixed); }
-
-  /* Sentence highlights */
-  .highlights-panel {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    overflow: hidden;
-  }
-
-  .highlights-body {
-    padding: 20px;
-    font-size: 0.9rem;
-    line-height: 2;
-    font-weight: 300;
-  }
-
-  .sent {
-    display: inline;
-    border-radius: 3px;
-    padding: 1px 2px;
-    cursor: default;
-    position: relative;
-  }
-
-  .sent.ai-sent {
-    background: rgba(248,113,113,0.15);
-    border-bottom: 2px solid rgba(248,113,113,0.5);
-  }
-
-  .sent.human-sent {
-    background: rgba(52,211,153,0.08);
-  }
-
-  .sent.mixed-sent {
-    background: rgba(251,191,36,0.12);
-    border-bottom: 2px solid rgba(251,191,36,0.4);
-  }
-
-  /* Legend */
-  .legend {
-    display: flex;
-    gap: 20px;
-    padding: 12px 20px;
-    border-top: 1px solid var(--border);
-    background: var(--surface2);
-    flex-wrap: wrap;
-  }
-
-  .legend-item {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 0.72rem;
-    color: var(--text-muted);
-    font-weight: 500;
-  }
-
-  .legend-dot {
-    width: 10px; height: 10px;
-    border-radius: 2px;
-  }
-
-  .legend-dot.ai { background: rgba(248,113,113,0.5); }
-  .legend-dot.human { background: rgba(52,211,153,0.3); }
-  .legend-dot.mixed { background: rgba(251,191,36,0.4); }
-
-  /* Loader */
-  .loader {
-    text-align: center;
-    padding: 40px 20px;
-    display: none;
-  }
-
-  .loader.visible { display: block; }
-
-  .loader-ring {
-    display: inline-block;
-    width: 44px;
-    height: 44px;
-    border: 3px solid var(--border);
-    border-top-color: var(--human);
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-    margin-bottom: 14px;
-  }
-
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  .loader-text {
-    font-size: 0.82rem;
-    color: var(--text-muted);
-    font-family: 'DM Mono', monospace;
-  }
-
-  /* Features chips */
-  .chips {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    flex-wrap: wrap;
-    padding: 0 20px 50px;
-    max-width: 720px;
-    margin: 0 auto;
-    position: relative;
-    z-index: 5;
-  }
-
-  .chip {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 0.75rem;
-    color: var(--text-muted);
-    background: var(--surface);
-    border: 1px solid var(--border);
-    padding: 6px 13px;
-    border-radius: 20px;
-    font-weight: 500;
-  }
-
-  /* Toast */
-  .toast {
-    position: fixed;
-    bottom: 28px;
-    right: 28px;
-    background: var(--surface2);
-    border: 1px solid var(--human-border);
-    border-radius: 10px;
-    padding: 11px 16px;
-    font-size: 0.82rem;
-    color: var(--text);
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    z-index: 999;
-    opacity: 0;
-    transform: translateY(8px);
-    transition: all 0.3s;
-    pointer-events: none;
-  }
-
+  .signals { display: grid; grid-template-columns: repeat(auto-fit,minmax(160px,1fr)); gap: 10px; margin-bottom: 16px; }
+  .signal-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+  .signal-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-muted); font-weight: 600; margin-bottom: 6px; }
+  .signal-value { font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
+  .signal-bar-track { height: 4px; background: var(--border); border-radius: 3px; overflow: hidden; }
+  .signal-bar-fill  { height: 100%; border-radius: 3px; transition: width 1s cubic-bezier(.4,0,.2,1); width: 0%; }
+  .highlights-panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  .highlights-body { padding: 20px; font-size: 0.9rem; line-height: 2; font-weight: 300; }
+  .sent { display: inline; border-radius: 3px; padding: 1px 3px; cursor: default; }
+  .sent.ai-sent    { background: rgba(248,113,113,0.18); border-bottom: 2px solid rgba(248,113,113,0.5); }
+  .sent.human-sent { background: rgba(52,211,153,0.08); }
+  .sent.mixed-sent { background: rgba(251,191,36,0.14); border-bottom: 2px solid rgba(251,191,36,0.4); }
+  .legend { display: flex; gap: 20px; padding: 12px 20px; border-top: 1px solid var(--border); background: var(--surface2); flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 0.72rem; color: var(--text-muted); font-weight: 500; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 2px; }
+  .legend-dot.ai    { background: rgba(248,113,113,0.5); }
+  .legend-dot.human { background: rgba(52,211,153,0.4); }
+  .legend-dot.mixed { background: rgba(251,191,36,0.5); }
+  .chips { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; padding: 0 20px 50px; max-width: 720px; margin: 0 auto; position: relative; z-index: 5; }
+  .chip { display: flex; align-items: center; gap: 6px; font-size: 0.75rem; color: var(--text-muted); background: var(--surface); border: 1px solid var(--border); padding: 6px 13px; border-radius: 20px; font-weight: 500; }
+  .toast { position: fixed; bottom: 28px; right: 28px; background: var(--surface2); border: 1px solid var(--human-border); border-radius: 10px; padding: 11px 16px; font-size: 0.82rem; color: var(--text); display: flex; align-items: center; gap: 7px; z-index: 999; opacity: 0; transform: translateY(8px); transition: all 0.3s; pointer-events: none; }
   .toast.show { opacity: 1; transform: translateY(0); }
-
-  @media (max-width: 600px) {
-    .score-card { flex-direction: column; gap: 20px; }
-    header { padding: 16px 20px; }
-  }
+  @media(max-width:600px){ .score-card{flex-direction:column;gap:20px} header{padding:16px 20px} }
 </style>
 </head>
 <body>
-
+ 
 <header>
   <a class="back-btn" href="index.html" title="Back to homepage">✕</a>
-  <div class="logo">
-    <div class="logo-icon">🔍</div>
-    AI<span>Detector</span>
-  </div>
-  <div class="badge">Free Tool</div>
+  <div class="logo"><div class="logo-icon">🔍</div>AI<span>Detector</span></div>
+  <div class="badge">No API Key Needed</div>
 </header>
-
+ 
 <section class="hero">
-  <div class="hero-tag">Sentence-Level Analysis</div>
+  <div class="hero-tag">Instant Local Analysis</div>
   <h1><span class="g">Is Your Text Human<br>or AI-Generated?</span></h1>
-  <p class="hero-sub">Paste any text and get an instant human score with sentence-by-sentence highlighting showing exactly which parts look AI-written.</p>
+  <p class="hero-sub">Paste any text for an instant analysis. Works entirely in your browser — no account, no API key, completely free.</p>
 </section>
-
+ 
 <div class="tool-wrap">
-
   <div class="input-panel">
     <div class="panel-header">
       <span class="panel-title">Text to Analyze</span>
@@ -570,46 +135,32 @@
     <textarea id="inputText" placeholder="Paste the text you want to analyze here...&#10;&#10;Works with text from ChatGPT, Gemini, Claude, or any AI tool." oninput="updateCount()"></textarea>
     <div class="panel-footer">
       <span id="wordCount">0 words</span>
-      <span>Supports up to 5,000 words</span>
+      <span>Minimum 20 words for best results</span>
     </div>
   </div>
-
+ 
   <button class="btn-analyze" id="analyzeBtn" onclick="analyze()">🔍 Analyze Text</button>
-
-  <div class="loader" id="loader">
-    <div class="loader-ring"></div>
-    <div class="loader-text">Analyzing sentence patterns...</div>
-  </div>
-
+ 
   <div class="results" id="results">
-
-    <!-- Score card -->
     <div class="score-card" id="scoreCard">
       <div class="score-dial">
         <svg viewBox="0 0 110 110">
           <circle class="score-dial-track" cx="55" cy="55" r="44"/>
-          <circle class="score-dial-fill" id="dialFill" cx="55" cy="55" r="44"
-            stroke-dasharray="276.5"
-            stroke-dashoffset="276.5"/>
+          <circle class="score-dial-fill" id="dialFill" cx="55" cy="55" r="44" stroke-dasharray="276.5" stroke-dashoffset="276.5"/>
         </svg>
-        <div class="score-num" id="scoreNum">
-          <span id="scoreVal">—</span>
-          <small>Human</small>
-        </div>
+        <div class="score-num"><span id="scoreVal">—</span><small>Human</small></div>
       </div>
-
       <div class="score-info">
         <div class="score-verdict" id="verdict">—</div>
         <div class="score-desc" id="verdictDesc">—</div>
       </div>
-
       <div class="score-bars">
         <div class="bar-item">
-          <div class="bar-label"><span>Human</span><span id="humanPct">—</span></div>
+          <div class="bar-label"><span>Human signals</span><span id="humanPct">—</span></div>
           <div class="bar-track"><div class="bar-fill human" id="humanBar"></div></div>
         </div>
         <div class="bar-item">
-          <div class="bar-label"><span>AI</span><span id="aiPct">—</span></div>
+          <div class="bar-label"><span>AI signals</span><span id="aiPct">—</span></div>
           <div class="bar-track"><div class="bar-fill ai" id="aiBar"></div></div>
         </div>
         <div class="bar-item">
@@ -618,12 +169,13 @@
         </div>
       </div>
     </div>
-
-    <!-- Sentence highlights -->
+ 
+    <div class="signals" id="signalCards"></div>
+ 
     <div class="highlights-panel">
       <div class="panel-header">
         <span class="panel-title">Sentence-Level Breakdown</span>
-        <button class="icon-btn" onclick="copyHighlightText()">📋 Copy Text</button>
+        <button class="icon-btn" onclick="copyText()">📋 Copy Text</button>
       </div>
       <div class="highlights-body" id="highlightsBody"></div>
       <div class="legend">
@@ -632,175 +184,241 @@
         <div class="legend-item"><div class="legend-dot mixed"></div> Uncertain</div>
       </div>
     </div>
-
   </div>
 </div>
-
+ 
 <div class="chips">
   <div class="chip">🛡️ Detects ChatGPT, Claude & Gemini</div>
-  <div class="chip">📝 Sentence-Level Highlights</div>
-  <div class="chip">⚡ Instant Results</div>
-  <div class="chip">🔒 No Text Stored</div>
-  <div class="chip">✅ 100% Free</div>
+  <div class="chip">⚡ Instant — No API Needed</div>
+  <div class="chip">🔒 100% Private — Stays in Browser</div>
+  <div class="chip">✅ Completely Free</div>
 </div>
-
-<div class="toast" id="toast">✓ <span id="toastMsg">Copied!</span></div>
-
+ 
+<div class="toast" id="toast">✓ <span id="toastMsg">Done!</span></div>
+ 
 <script>
-  function updateCount() {
-    const text = document.getElementById('inputText').value.trim();
-    const words = text ? text.split(/\s+/).length : 0;
-    document.getElementById('wordCount').textContent = `${words} word${words !== 1 ? 's' : ''}`;
-  }
-
-  async function pasteText() {
-    try {
-      const text = await navigator.clipboard.readText();
-      document.getElementById('inputText').value = text;
-      updateCount();
-    } catch { showToast('Could not access clipboard'); }
-  }
-
-  function clearAll() {
-    document.getElementById('inputText').value = '';
-    updateCount();
-    document.getElementById('results').classList.remove('visible');
-    document.getElementById('loader').classList.remove('visible');
-  }
-
-  function showToast(msg) {
-    const t = document.getElementById('toast');
-    document.getElementById('toastMsg').textContent = msg;
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 2500);
-  }
-
-  function copyHighlightText() {
-    const text = document.getElementById('inputText').value;
-    if (text) navigator.clipboard.writeText(text).then(() => showToast('Text copied!'));
-  }
-
-  async function analyze() {
-    const input = document.getElementById('inputText').value.trim();
-    if (!input) { showToast('Please paste some text first'); return; }
-
-    const btn = document.getElementById('analyzeBtn');
-    btn.disabled = true;
-    btn.textContent = 'Analyzing...';
-    document.getElementById('results').classList.remove('visible');
-    document.getElementById('loader').classList.add('visible');
-
-    const prompt = `You are an expert AI content detector. Analyze the following text and determine if each sentence was written by a human or generated by AI.
-
-For each sentence, classify it as:
-- "ai" — clearly AI-generated (predictable phrasing, robotic transitions, overly formal, repetitive structure)
-- "human" — clearly human-written (natural flow, personal voice, varied rhythm, authentic expression)
-- "mixed" — uncertain or a mix
-
-Also provide:
-- An overall human score from 0–100 (100 = fully human, 0 = fully AI)
-- A verdict label: "Very Likely Human", "Likely Human", "Uncertain", "Likely AI", or "Very Likely AI"
-- A brief 1-sentence explanation of the verdict
-
-Respond ONLY with valid JSON in this exact format, no markdown, no extra text:
-{
-  "humanScore": 72,
-  "verdict": "Likely Human",
-  "explanation": "The text shows natural sentence rhythm and personal voice, though some transitions feel formulaic.",
-  "sentences": [
-    { "text": "Sentence one here.", "label": "human" },
-    { "text": "Sentence two here.", "label": "ai" }
-  ]
+const AI_PHRASES = [
+  "it is important to note","it is worth noting","it is crucial to","in conclusion","in summary",
+  "to summarize","to conclude","furthermore","moreover","additionally","nevertheless","nonetheless",
+  "it is essential","plays a crucial role","plays an important role","delve into","delve deeper",
+  "dive into","in the realm of","in the world of","in today's world","in today's society",
+  "it goes without saying","on the other hand","a wide range of","a variety of","a plethora of",
+  "a myriad of","cutting-edge","state-of-the-art","groundbreaking","first and foremost",
+  "last but not least","all in all","in a nutshell","as previously mentioned","as mentioned above",
+  "it should be noted","it must be noted","when it comes to","with regard to","in terms of",
+  "harnessing","leveraging","utilize","facilitate","comprehensive","robust","synergy","paradigm",
+  "transformative","seamlessly","streamline","ensure that","in order to","that being said",
+  "having said that","undoubtedly","unquestionably","as a result","as a consequence",
+  "consequently","therefore","thus","overall","generally speaking","broadly speaking"
+];
+ 
+const HUMAN_MARKERS = [
+  "i think","i feel","i believe","i guess","i mean","honestly","personally","actually",
+  "basically","literally","seriously","kind of","sort of","a bit","pretty much","you know",
+  "you see","ok so","okay so","so yeah","well,","tbh","ngl","imo","lol","haha","wait,",
+  "but yeah","to be honest","to be fair","look,","listen,","anyway","the thing is",
+  "here's the thing","funny thing is","weirdly enough","ironically","surprisingly",
+  "for what it's worth","if you ask me","not gonna lie"
+];
+ 
+const TRANSITION_AI = [
+  "furthermore","moreover","additionally","consequently","subsequently","nevertheless",
+  "nonetheless","notwithstanding","henceforth","herein","therein","whereby","thereof"
+];
+ 
+function getSentences(text) {
+  return text.match(/[^.!?]+[.!?]+/g) || [text];
 }
-
-Text to analyze:
-${input}`;
-
-    try {
-      const response = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
-          max_tokens: 1000,
-          messages: [{ role: 'user', content: prompt }]
-        })
-      });
-
-      const data = await response.json();
-      let raw = data.content?.[0]?.text || '';
-      raw = raw.replace(/```json|```/g, '').trim();
-      const result = JSON.parse(raw);
-
-      renderResults(result);
-    } catch (err) {
-      showToast('Analysis failed. Please try again.');
-    } finally {
-      btn.disabled = false;
-      btn.textContent = '🔍 Analyze Text';
-      document.getElementById('loader').classList.remove('visible');
-    }
-  }
-
-  function renderResults(result) {
-    const { humanScore, verdict, explanation, sentences } = result;
-
-    // Score card type
-    const card = document.getElementById('scoreCard');
-    card.className = 'score-card';
-    if (humanScore >= 65) card.classList.add('human');
-    else if (humanScore <= 40) card.classList.add('ai');
-    else card.classList.add('mixed');
-
-    // Dial
-    const circumference = 276.5;
-    const offset = circumference - (humanScore / 100) * circumference;
-    const dialFill = document.getElementById('dialFill');
-    dialFill.style.strokeDashoffset = circumference;
-    dialFill.style.stroke = humanScore >= 65 ? '#34d399' : humanScore <= 40 ? '#f87171' : '#fbbf24';
-    setTimeout(() => { dialFill.style.strokeDashoffset = offset; }, 50);
-
-    document.getElementById('scoreVal').textContent = humanScore + '%';
-    document.getElementById('scoreVal').style.color = humanScore >= 65 ? '#34d399' : humanScore <= 40 ? '#f87171' : '#fbbf24';
-
-    // Verdict
-    document.getElementById('verdict').textContent = verdict;
-    document.getElementById('verdict').style.color = humanScore >= 65 ? '#34d399' : humanScore <= 40 ? '#f87171' : '#fbbf24';
-    document.getElementById('verdictDesc').textContent = explanation;
-
-    // Bars
-    const aiCount = sentences.filter(s => s.label === 'ai').length;
-    const humanCount = sentences.filter(s => s.label === 'human').length;
-    const mixedCount = sentences.filter(s => s.label === 'mixed').length;
-    const total = sentences.length || 1;
-
-    const hPct = Math.round((humanCount / total) * 100);
-    const aPct = Math.round((aiCount / total) * 100);
-    const mPct = Math.round((mixedCount / total) * 100);
-
-    document.getElementById('humanPct').textContent = hPct + '%';
-    document.getElementById('aiPct').textContent = aPct + '%';
-    document.getElementById('mixedPct').textContent = mPct + '%';
-
-    setTimeout(() => {
-      document.getElementById('humanBar').style.width = hPct + '%';
-      document.getElementById('aiBar').style.width = aPct + '%';
-      document.getElementById('mixedBar').style.width = mPct + '%';
-    }, 100);
-
-    // Sentence highlights
-    const body = document.getElementById('highlightsBody');
-    body.innerHTML = sentences.map(s => {
-      const cls = s.label === 'ai' ? 'ai-sent' : s.label === 'mixed' ? 'mixed-sent' : 'human-sent';
-      return `<span class="sent ${cls}" title="${s.label === 'ai' ? 'Likely AI-written' : s.label === 'mixed' ? 'Uncertain' : 'Likely Human-written'}">${escapeHtml(s.text)} </span>`;
-    }).join('');
-
-    document.getElementById('results').classList.add('visible');
-  }
-
-  function escapeHtml(text) {
-    return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  }
+ 
+function tokenize(text) {
+  return text.toLowerCase().replace(/[^a-z\s']/g,' ').split(/\s+/).filter(Boolean);
+}
+ 
+function burstiness(sentences) {
+  const lens = sentences.map(s => s.trim().split(/\s+/).length);
+  if (lens.length < 2) return 0;
+  const mean = lens.reduce((a,b)=>a+b,0)/lens.length;
+  const sd = Math.sqrt(lens.reduce((s,l)=>s+Math.pow(l-mean,2),0)/lens.length);
+  return mean > 0 ? sd/mean : 0;
+}
+ 
+function countPhrases(text, phrases) {
+  const lower = text.toLowerCase();
+  return phrases.filter(p => lower.includes(p)).length;
+}
+ 
+function vocabRichness(words) {
+  return words.length ? new Set(words).size/words.length : 0;
+}
+ 
+function repetitionScore(sentences) {
+  const starters = sentences.map(s=>s.trim().split(/\s+/)[0]?.toLowerCase()||'');
+  const counts = {};
+  starters.forEach(w => counts[w]=(counts[w]||0)+1);
+  const repeated = Object.values(counts).filter(c=>c>1).reduce((a,b)=>a+b,0);
+  return sentences.length ? repeated/sentences.length : 0;
+}
+ 
+function punctuationVariety(text) {
+  return [/!/.test(text),/\?/.test(text),/—|-{1,2}/.test(text),/\.{2,}/.test(text),/\(.*?\)/.test(text)].filter(Boolean).length;
+}
+ 
+function analyzeText(text) {
+  const sentences = getSentences(text);
+  const words = tokenize(text);
+  if (words.length < 5) return null;
+ 
+  const aiPhraseCount   = countPhrases(text, AI_PHRASES);
+  const humanMarkerCount = countPhrases(text, HUMAN_MARKERS);
+  const formalTransitions = countPhrases(text, TRANSITION_AI);
+  const burst    = burstiness(sentences);
+  const vocab    = vocabRichness(words);
+  const avgLen   = sentences.map(s=>s.trim().split(/\s+/).length).reduce((a,b)=>a+b,0)/sentences.length;
+  const repScore = repetitionScore(sentences);
+  const punctVar = punctuationVariety(text);
+ 
+  let score = 50;
+  score -= Math.min(aiPhraseCount * 4, 30);
+  score += Math.min(humanMarkerCount * 5, 25);
+  if (burst > 0.6) score += 15; else if (burst > 0.4) score += 8; else if (burst < 0.2) score -= 12;
+  if (avgLen > 25) score -= 10; else if (avgLen > 20) score -= 5; else if (avgLen < 12) score += 5;
+  if (repScore > 0.4) score -= 10; else if (repScore > 0.25) score -= 5;
+  if (punctVar >= 3) score += 10; else if (punctVar >= 2) score += 5; else if (punctVar === 0) score -= 5;
+  score -= Math.min(formalTransitions * 3, 15);
+  score = Math.max(0, Math.min(100, Math.round(score)));
+ 
+  const classifiedSentences = sentences.map(sent => {
+    const lower = sent.toLowerCase();
+    let s = 0;
+    s -= countPhrases(sent, AI_PHRASES) * 2;
+    s += countPhrases(sent, HUMAN_MARKERS) * 2;
+    s -= countPhrases(sent, TRANSITION_AI);
+    const wc = sent.trim().split(/\s+/).length;
+    if (wc > 30) s -= 2; if (wc < 8) s += 1;
+    if (/[!?]/.test(sent)) s += 1;
+    if (/\bi\b/.test(lower)) s += 1;
+    return { text: sent.trim(), label: s >= 2 ? 'human' : s <= -2 ? 'ai' : 'mixed' };
+  });
+ 
+  const aiCount    = classifiedSentences.filter(s=>s.label==='ai').length;
+  const humanCount = classifiedSentences.filter(s=>s.label==='human').length;
+  const mixedCount = classifiedSentences.filter(s=>s.label==='mixed').length;
+  const total = classifiedSentences.length || 1;
+ 
+  let verdict, explanation;
+  if (score >= 75)      { verdict='Very Likely Human'; explanation='Strong natural variation, informal language, and few AI-typical patterns detected.'; }
+  else if (score >= 58) { verdict='Likely Human';      explanation='Mostly human patterns, though some sentences lean formulaic.'; }
+  else if (score >= 42) { verdict='Uncertain';         explanation='Mixed signals — could be human-edited AI text or formally written content.'; }
+  else if (score >= 25) { verdict='Likely AI';         explanation='Several AI-typical phrases, uniform structure, and low variation detected.'; }
+  else                  { verdict='Very Likely AI';    explanation='Strong AI patterns: predictable phrasing, uniform sentence lengths, and many AI marker phrases.'; }
+ 
+  const signals = [
+    { label:'AI Phrases Found',      display: aiPhraseCount+' found',              pct: Math.min(aiPhraseCount/8*100,100),    color: aiPhraseCount>3?'#f87171':aiPhraseCount>1?'#fbbf24':'#34d399' },
+    { label:'Sentence Variation',    display: burst>0.5?'High':burst>0.3?'Medium':'Low', pct: Math.min(burst*150,100),        color: burst>0.5?'#34d399':burst>0.3?'#fbbf24':'#f87171' },
+    { label:'Human Markers',         display: humanMarkerCount+' found',            pct: Math.min(humanMarkerCount/5*100,100), color: humanMarkerCount>2?'#34d399':humanMarkerCount>0?'#fbbf24':'#f87171' },
+    { label:'Avg Sentence Length',   display: Math.round(avgLen)+' words',          pct: Math.min(avgLen/35*100,100),          color: avgLen>25?'#f87171':avgLen>18?'#fbbf24':'#34d399' },
+    { label:'Vocab Richness',        display: Math.round(vocab*100)+'%',            pct: vocab*100,                            color: vocab>0.6?'#34d399':vocab>0.4?'#fbbf24':'#f87171' },
+    { label:'Punctuation Variety',   display: punctVar>=3?'Rich':punctVar>=1?'Moderate':'Flat', pct: Math.min(punctVar/5*100,100), color: punctVar>=3?'#34d399':punctVar>=1?'#fbbf24':'#f87171' }
+  ];
+ 
+  return {
+    score, verdict, explanation, sentences: classifiedSentences, signals,
+    hPct: Math.round(humanCount/total*100),
+    aPct: Math.round(aiCount/total*100),
+    mPct: Math.round(mixedCount/total*100)
+  };
+}
+ 
+function updateCount() {
+  const text = document.getElementById('inputText').value.trim();
+  const words = text ? text.split(/\s+/).length : 0;
+  document.getElementById('wordCount').textContent = `${words} word${words!==1?'s':''}`;
+}
+ 
+async function pasteText() {
+  try {
+    const text = await navigator.clipboard.readText();
+    document.getElementById('inputText').value = text;
+    updateCount();
+  } catch { showToast('Could not access clipboard'); }
+}
+ 
+function clearAll() {
+  document.getElementById('inputText').value = '';
+  updateCount();
+  document.getElementById('results').classList.remove('visible');
+}
+ 
+function copyText() {
+  const text = document.getElementById('inputText').value;
+  if (text) navigator.clipboard.writeText(text).then(()=>showToast('Copied!'));
+}
+ 
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2500);
+}
+ 
+function analyze() {
+  const input = document.getElementById('inputText').value.trim();
+  if (!input) { showToast('Please paste some text first'); return; }
+  const btn = document.getElementById('analyzeBtn');
+  btn.disabled = true; btn.textContent = 'Analyzing...';
+  setTimeout(() => {
+    const result = analyzeText(input);
+    if (!result) { showToast('Please enter at least a few words'); btn.disabled=false; btn.textContent='🔍 Analyze Text'; return; }
+    renderResults(result);
+    btn.disabled = false; btn.textContent = '🔍 Analyze Text';
+  }, 300);
+}
+ 
+function renderResults(r) {
+  const { score, verdict, explanation, sentences, hPct, aPct, mPct, signals } = r;
+  const color = score>=58?'#34d399':score<=42?'#f87171':'#fbbf24';
+  const cls   = score>=58?'human':score<=42?'ai':'mixed';
+ 
+  document.getElementById('scoreCard').className = 'score-card '+cls;
+ 
+  const dialFill = document.getElementById('dialFill');
+  dialFill.style.stroke = color;
+  dialFill.style.strokeDashoffset = 276.5;
+  setTimeout(()=>{ dialFill.style.strokeDashoffset = 276.5-(score/100)*276.5; }, 50);
+ 
+  const sv = document.getElementById('scoreVal');
+  sv.textContent = score+'%'; sv.style.color = color;
+ 
+  const vd = document.getElementById('verdict');
+  vd.textContent = verdict; vd.style.color = color;
+  document.getElementById('verdictDesc').textContent = explanation;
+ 
+  document.getElementById('humanPct').textContent = hPct+'%';
+  document.getElementById('aiPct').textContent    = aPct+'%';
+  document.getElementById('mixedPct').textContent = mPct+'%';
+  setTimeout(()=>{
+    document.getElementById('humanBar').style.width = hPct+'%';
+    document.getElementById('aiBar').style.width    = aPct+'%';
+    document.getElementById('mixedBar').style.width = mPct+'%';
+  }, 100);
+ 
+  document.getElementById('signalCards').innerHTML = signals.map(s=>`
+    <div class="signal-card">
+      <div class="signal-label">${s.label}</div>
+      <div class="signal-value" style="color:${s.color}">${s.display}</div>
+      <div class="signal-bar-track"><div class="signal-bar-fill" style="background:${s.color};width:0%" data-pct="${s.pct}"></div></div>
+    </div>`).join('');
+  setTimeout(()=>{ document.querySelectorAll('.signal-bar-fill').forEach(el=>el.style.width=el.dataset.pct+'%'); }, 100);
+ 
+  document.getElementById('highlightsBody').innerHTML = sentences.map(s=>{
+    const cls = s.label==='ai'?'ai-sent':s.label==='mixed'?'mixed-sent':'human-sent';
+    const tip = s.label==='ai'?'Likely AI-written':s.label==='mixed'?'Uncertain':'Likely Human-written';
+    return `<span class="sent ${cls}" title="${tip}">${s.text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')} </span>`;
+  }).join('');
+ 
+  document.getElementById('results').classList.add('visible');
+  document.getElementById('results').scrollIntoView({behavior:'smooth',block:'start'});
+}
 </script>
 </body>
 </html>

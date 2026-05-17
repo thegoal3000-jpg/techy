@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Detector • HumaLingo Style</title>
+  <title>AI Detector - GPTZero Style</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -14,25 +14,25 @@
     * { margin:0; padding:0; box-sizing:border-box; }
     body {
       font-family: 'Inter', system-ui, sans-serif;
-      background: #0f0f12;
+      background: #0a0a0f;
       color: #e5e5e5;
-      line-height: 1.6;
       padding: 20px;
+      line-height: 1.6;
     }
-    .container { max-width: 820px; margin: 40px auto; }
+    .container { max-width: 860px; margin: 30px auto; }
     h1 {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 2.4rem;
+      font-size: 2.6rem;
       text-align: center;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
-    .subtitle { text-align:center; color:#888; margin-bottom:40px; }
+    .subtitle { text-align:center; color:#777; font-size:1.1rem; margin-bottom:40px; }
 
     .input-area {
-      background: #17171a;
+      background: #121216;
       border: 1px solid #333;
       border-radius: 16px;
-      padding: 20px;
+      padding: 24px;
       margin-bottom: 20px;
     }
     textarea {
@@ -42,99 +42,97 @@
       border: none;
       outline: none;
       color: #e5e5e5;
-      font-size: 1.02rem;
-      resize: vertical;
+      font-size: 1.05rem;
     }
-    .char-count {
-      text-align: right;
-      font-size: 0.85rem;
-      color: #666;
-      margin-top: 8px;
-    }
+    .char-count { text-align:right; color:#666; margin-top:8px; }
 
     button {
       width: 100%;
-      padding: 16px;
-      font-size: 1.1rem;
+      padding: 18px;
+      font-size: 1.2rem;
       font-weight: 600;
       background: linear-gradient(90deg, #10b981, #34d399);
       color: black;
       border: none;
       border-radius: 12px;
       cursor: pointer;
-      margin: 10px 0 30px;
+      margin-bottom: 30px;
     }
-    button:hover { opacity: 0.9; }
 
-    .results {
-      display: none;
-      animation: fadeIn 0.4s;
+    .results { display: none; animation: fadeIn 0.5s; }
+    @keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
+
+    .main-score {
+      text-align: center;
+      margin: 30px 0;
     }
     .score-circle {
-      width: 180px;
-      height: 180px;
+      width: 200px;
+      height: 200px;
+      margin: 0 auto;
       border-radius: 50%;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      margin: 30px auto;
-      position: relative;
-      border: 12px solid #222;
-      font-size: 3rem;
+      font-size: 3.5rem;
       font-weight: 700;
+      border: 16px solid #222;
+      background: #0f0f12;
     }
+    .ai-prob { font-size: 1.1rem; margin-top: 8px; color: #ef4444; }
+
     .verdict {
       text-align: center;
-      font-size: 1.4rem;
-      margin: 15px 0 30px;
+      font-size: 1.55rem;
+      margin: 16px 0 40px;
       font-weight: 600;
     }
 
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin: 30px 0;
+      flex-wrap: wrap;
+    }
+    .stat-item { text-align: center; }
+    .stat-value { font-size: 1.8rem; font-weight: 600; }
+    .stat-label { font-size: 0.85rem; color: #888; }
+
     .highlight-box {
-      background: #17171a;
+      background: #121216;
       border: 1px solid #333;
-      border-radius: 12px;
-      padding: 20px;
+      border-radius: 16px;
+      padding: 24px;
       margin-top: 30px;
     }
     .sentence {
-      display: block;
-      padding: 10px 14px;
-      margin: 8px 0;
-      border-radius: 8px;
-      transition: all 0.2s;
+      padding: 14px 18px;
+      margin: 12px 0;
+      border-radius: 10px;
+      border-left: 5px solid transparent;
     }
-    .sentence.ai { background: rgba(239, 68, 68, 0.15); border-left: 4px solid var(--ai); }
-    .sentence.human { background: rgba(16, 185, 129, 0.1); }
-    .reason {
-      font-size: 0.8rem;
-      color: #888;
-      margin-top: 4px;
-    }
-
-    .loader {
-      text-align: center;
-      padding: 60px 20px;
-      display: none;
-    }
-    .loader.show { display: block; }
+    .sentence.ai { background: rgba(239,68,68,0.12); border-color: var(--ai); }
+    .sentence.human { background: rgba(16,185,129,0.08); border-color: var(--human); }
+    .reason { font-size: 0.83rem; color: #999; margin-top: 6px; }
   </style>
 </head>
 <body>
 
 <div class="container">
-  <h1>AI Content Detector</h1>
-  <p class="subtitle">Detect AI-written text like HumaLingo</p>
+  <h1>AI Detector</h1>
+  <p class="subtitle">Powered by Perplexity • Burstiness • Pattern Analysis (GPTZero Style)</p>
 
   <div class="input-area">
     <textarea id="textInput" placeholder="Paste your text here..."></textarea>
     <div class="char-count"><span id="count">0</span> characters</div>
   </div>
 
-  <button onclick="analyzeText()">Scan for AI</button>
+  <button onclick="analyzeText()">🔍 Scan for AI</button>
 
-  <div class="loader" id="loader">
-    <p>Analyzing text patterns...</p>
+  <div id="loader" style="text-align:center; padding:60px; display:none; color:#888;">
+    Analyzing writing patterns...
   </div>
 
   <div class="results" id="results"></div>
@@ -143,77 +141,106 @@
 <script>
 function analyzeText() {
   const text = document.getElementById('textInput').value.trim();
-  if (text.length < 50) {
-    alert("Please enter at least 50 characters.");
+  if (text.length < 60) {
+    alert("Please enter at least 60 characters for better accuracy.");
     return;
   }
 
-  document.getElementById('loader').classList.add('show');
+  document.getElementById('loader').style.display = 'block';
   document.getElementById('results').style.display = 'none';
 
   setTimeout(() => {
     const result = detectAI(text);
     renderResults(result, text);
-    document.getElementById('loader').classList.remove('show');
-  }, 600);
+    document.getElementById('loader').style.display = 'none';
+  }, 550);
 }
 
 function detectAI(text) {
   const sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
+  let aiScoreTotal = 0;
   let aiSentences = 0;
-  let totalScore = 0;
 
-  const transitionWords = /furthermore|moreover|additionally|therefore|thus|hence|in conclusion|overall|it is important|it should be noted/gi;
-  const repetitivePatterns = /very very|really really|in order to|the fact that/gi;
+  const transRegex = /furthermore|moreover|additionally|therefore|thus|hence|in conclusion|overall|it is important/gi;
+  const repRegex = /very very|really really|the fact that|in order to/gi;
 
-  const highlighted = sentences.map(sent => {
-    const lower = sent.toLowerCase();
-    let score = 50;
+  const analyzedSentences = sentences.map(sent => {
+    const lower = sent.toLowerCase().trim();
+    let score = 40; // base
     let reason = "";
 
-    const length = sent.split(' ').length;
-    if (length > 15 && length < 30) score += 15;           // uniform length
-    if (transitionWords.test(lower)) { score += 25; reason = "Repetitive transition phrase"; }
-    if (repetitivePatterns.test(lower)) { score += 20; reason = "Repetitive wording"; }
-    if (lower.split(' ').filter(w => w.length > 8).length > 3) score += 12; // long complex words
+    const wordCount = sent.split(/\s+/).length;
 
-    if (score > 70) aiSentences++;
+    // Burstiness / Uniform length penalty
+    if (wordCount > 12 && wordCount < 32) score += 18;
 
-    totalScore += score;
+    // Repetitive transitions
+    if (transRegex.test(lower)) {
+      score += 28;
+      reason = "Common AI transition phrase";
+    }
+
+    // Repetition
+    if (repRegex.test(lower) || (lower.match(/\b(\w+)\b.*\b\1\b/gi) || []).length > 1) {
+      score += 22;
+      reason = "Repetitive phrasing";
+    }
+
+    // Long complex sentences
+    if (wordCount > 35) score += 15;
+
+    if (score > 65) aiSentences++;
+
+    aiScoreTotal += score;
+
     return {
       text: sent.trim(),
-      score: Math.min(95, score),
-      reason: reason || (score > 65 ? "Uniform structure" : "Natural variation")
+      score: Math.min(92, score),
+      reason: reason || (score > 60 ? "Uniform & predictable" : "Natural flow")
     };
   });
 
+  const avgScore = Math.round(aiScoreTotal / sentences.length);
   const aiPercentage = Math.round((aiSentences / sentences.length) * 100);
-  const humanScore = Math.max(5, 100 - Math.round(totalScore / sentences.length));
+  const humanScore = Math.max(8, 100 - avgScore);
 
   return {
     humanScore: humanScore,
     aiPercentage: aiPercentage,
-    sentences: highlighted,
-    verdict: humanScore > 70 ? "Mostly Human" : humanScore > 45 ? "Mixed / Uncertain" : "Mostly AI-Generated"
+    sentences: analyzedSentences,
+    verdict: humanScore > 72 ? "Likely Human" : humanScore > 50 ? "Mixed" : "Likely AI-Generated"
   };
 }
 
 function renderResults(result, originalText) {
+  const color = result.humanScore > 65 ? 'var(--human)' : 'var(--ai)';
+
   let html = `
-    <div class="score-circle" style="color: ${result.humanScore > 60 ? 'var(--human)' : 'var(--ai)'}">
-      ${result.humanScore}%
-      <div style="font-size:1rem;margin-top:8px;">Human</div>
+    <div class="main-score">
+      <div class="score-circle" style="color: ${color}; border-color: ${color}">
+        ${result.humanScore}%
+        <div class="ai-prob">AI Probability: ${result.aiPercentage}%</div>
+      </div>
     </div>
-    <div class="verdict" style="color: ${result.humanScore > 60 ? '#10b981' : '#ef4444'}">
-      ${result.verdict}
+    <div class="verdict" style="color: ${color}">${result.verdict}</div>
+
+    <div class="stats">
+      <div class="stat-item">
+        <div class="stat-value" style="color:var(--human)">${result.humanScore}%</div>
+        <div class="stat-label">Human</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value" style="color:var(--ai)">${result.aiPercentage}%</div>
+        <div class="stat-label">AI</div>
+      </div>
     </div>
 
     <div class="highlight-box">
-      <h3 style="margin-bottom:16px;">Sentence Analysis</h3>
+      <h3 style="margin-bottom:18px; color:#ddd">Sentence-by-Sentence Analysis</h3>
   `;
 
   result.sentences.forEach(s => {
-    const cls = s.score > 65 ? 'ai' : 'human';
+    const cls = s.score > 62 ? 'ai' : 'human';
     html += `
       <div class="sentence ${cls}">
         ${s.text}
@@ -227,7 +254,7 @@ function renderResults(result, originalText) {
   document.getElementById('results').style.display = 'block';
 }
 
-// Live character count
+// Character count
 document.getElementById('textInput').addEventListener('input', function() {
   document.getElementById('count').textContent = this.value.length;
 });
